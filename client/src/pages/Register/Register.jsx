@@ -11,6 +11,7 @@ const Register = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    checkAdmin: "",
   });
 
   const setValue = (e) => {
@@ -23,11 +24,12 @@ const Register = () => {
       };
     });
   };
+  console.log(inputValue);
 
   const addUserData = async (e) => {
     e.preventDefault();
 
-    const { name, email, password, confirmPassword } = inputValue;
+    const { name, email, password, confirmPassword, checkAdmin } = inputValue;
 
     if (name === "") {
       alert("Please enter your name.");
@@ -45,28 +47,27 @@ const Register = () => {
       alert("Password must be longer than 8 character.");
     } else if (password !== confirmPassword) {
       alert("Password and ConfirmPassword don't match.");
+    } else if (checkAdmin === " ") {
+      alert("Please check one of the field.");
     } else {
       // console.log("User registration successful...");
       try {
-        const data = await axios.post(
-          "http://localhost:5000/api/auth/register",
-          inputValue
-        );
-        const result = await data.data; //returns data ie. payload
-        console.log(result);
-        const res = await data.status;
-        console.log(res);
-
-        if (res === 200) {
-          alert("User successfully registered.");
-          setInputValue({
-            ...inputValue,
-            name: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
+        const data = await axios
+          .post("http://localhost:5000/api/auth/register", inputValue)
+          .then((res) => {
+            console.log(res.data);
+            if (res.status === 200) {
+              alert("User successfully registered.");
+              setInputValue({
+                ...inputValue,
+                name: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+                checkAdmin: "",
+              });
+            }admin
           });
-        }
       } catch (err) {
         console.log(err);
       }
@@ -137,6 +138,27 @@ const Register = () => {
                 >
                   {!showConfirmPassword ? "Show" : "Hide"}
                 </div>
+              </div>
+
+              <div className="radio">
+                <label>Sign up as Renter</label>
+                <input
+                  className="radioBtn"
+                  type="radio"
+                  name="checkAdmin"
+                  value="1"
+                  // checked={inputValue.checkAdmin == "1"}
+                  onChange={setValue}
+                />
+                <label>Sign up as Customer</label>
+                <input
+                  className="radioBtn"
+                  type="radio"
+                  name="checkAdmin"
+                  value="2"
+                  // checked={inputValue.checkAdmin == "2"}
+                  onChange={setValue}
+                />
               </div>
             </div>
             <button className="btn" onClick={addUserData}>

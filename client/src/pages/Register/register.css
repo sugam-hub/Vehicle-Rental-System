@@ -118,3 +118,9 @@ form .btn:hover{
     color:#718096 ;
     border-bottom: 2px solid #8694a8;
 }
+
+.radio{
+    display: flex;
+    align-items: center;
+}
+

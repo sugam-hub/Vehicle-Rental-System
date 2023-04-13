@@ -18,11 +18,14 @@ mongoose
 
 //IMPORTING ROUTES
 const authRoute = require("./routes/auth");
+const carRoute = require("./routes/car");
 
 //USE ROUTES
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoute);
+app.use("/api/auth", carRoute);
+app.use("/api/auth", carRoute);
 
 app.listen(process.env.PORT || 6000, () => {
   console.log("Backend server is running in PORT: " + `${process.env.PORT}`);

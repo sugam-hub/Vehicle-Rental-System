@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema(
     password: { type: String, require: true },
     confirmPassword: { type: String, require: true },
     isSuperAdmin: { type: Boolean, default: false },
-    isBusinessOwner: { type: Boolean, default: false },
+    isBusinessOwner: { type: String, require: true },
   },
   { timestamps: true }
 );

@@ -16,6 +16,7 @@ router.post("/register", async (req, res) => {
       req.body.password,
       process.env.PASS_SEC
     ).toString(),
+    isBusinessOwner: req.body.admin,
   });
 
   try {

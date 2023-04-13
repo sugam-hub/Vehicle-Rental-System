@@ -2,6 +2,7 @@ import React from "react";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
+import BookingVehicle from "./pages/BookingVehicle/BookingVehicle";
 import Header from "./components/Header/Header";
 
 import {
@@ -14,12 +15,13 @@ import {
 const App = () => {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Router>
         <Routes>
           <Route path="/" exact element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="book" element={<BookingVehicle />} />
         </Routes>
       </Router>
     </>

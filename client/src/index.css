@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 *{
     margin: 0;
     padding: 0;
@@ -6,5 +7,26 @@
 }
 
 body{
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif !important;
+    background-color: azure;
 }
+
+/*bs = box shadow */
+.bs1{
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+h1{
+    font-size: 30px;
+    font-weight: bold;
+    color: rgb(240, 85, 29);
+}
+
+.header{
+    padding: 10px;
+}
+
+.content{
+    min-height: auto;
+}
+
