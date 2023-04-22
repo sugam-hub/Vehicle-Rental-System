@@ -5,13 +5,29 @@ const {
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
 } = require("./verifyToken");
+const multer = require("multer")
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb){
+    cb(null, "./uploads/")
+  },
+  filename: function(req,file, cb){
+    cb(null, file.originalname)
+  }
+})
+
+const upload = multer({storage: storage})
 
 //POST CAR
-router.post("/postcar", async (req, res) => {
+router.post("/postcar", upload.single("image"), async (req, res) => {
   const newCar = new Car({
     name: req.body.name,
     brand: req.body.brand,
     price: req.body.price,
+    image:{
+      data: (req.file.filename).toString(),
+      contentType: "image/png"
+    }
   });
 
   try {

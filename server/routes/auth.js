@@ -6,8 +6,8 @@ const CryptoJS = require("crypto-js");
 // REGISTER
 router.post("/register", async (req, res) => {
   const newUser = new User({
-    name: req.body.name,
-    email: req.body.email,
+    name: req.body.username,
+    // email: req.body.email,
     password: CryptoJS.AES.encrypt(
       req.body.password,
       process.env.PASS_SEC
@@ -16,7 +16,7 @@ router.post("/register", async (req, res) => {
       req.body.password,
       process.env.PASS_SEC
     ).toString(),
-    isBusinessOwner: req.body.admin,
+    // isBusinessOwner: req.body.admin,
   });
 
   try {
@@ -30,7 +30,7 @@ router.post("/register", async (req, res) => {
 //LOGIN
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ name: req.body.username });
     if (!user) {
       return res.status(401).json("User not found!!!");
     }
@@ -40,22 +40,22 @@ router.post("/login", async (req, res) => {
       process.env.PASS_SEC
     ).toString(CryptoJS.enc.Utf8);
 
-    const accessToken = jwt.sign(
-      {
-        id: user._id,
-        isAdmin: user.isAdmin,
-      },
-      process.env.JWT_SEC,
-      {
-        expiresIn: "3d",
-      }
-    );
+    // const accessToken = jwt.sign(
+    //   {
+    //     id: user._id,
+    //     // isAdmin: user.isAdmin,
+    //   },
+    //   process.env.JWT_SEC,
+    //   {
+    //     expiresIn: "3d",
+    //   }
+    // );
 
     if (hashedPassword !== req.body.password) {
       return res.status(401).json("Wrong Credentials!!!");
     } else {
       const { password, confirmPassword, ...otherInfo } = user._doc;
-      return res.status(200).json({ status: 200, accessToken, otherInfo });
+      return res.status(200).json({ status: 200, otherInfo });
     }
   } catch (err) {
     return res.status(500).json(err);

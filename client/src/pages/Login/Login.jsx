@@ -1,119 +1,57 @@
-import React, { useState } from "react";
-import "./login.css";
-import { useNavigate, NavLink } from "react-router-dom";
-import axios from "axios";
+import React from "react";
+import { Row, Col, Form, Input } from "antd";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { userLogin } from "../../redux/actions/userActions";
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [inputValue, setInputValue] = useState({
-    email: "",
-    password: "",
-  });
-
-  const navigate = useNavigate();
-
-  const setValue = (e) => {
-    const { name, value } = e.target;
-
-    setInputValue(() => {
-      return {
-        ...inputValue,
-        [name]: value,
-      };
-    });
+  const dispatch = useDispatch();
+  const onFinish = (values) => {
+    dispatch(userLogin(values));
+    console.log(values);
   };
-
-  const loginUser = async (e) => {
-    e.preventDefault();
-
-    const { email, password } = inputValue;
-
-    if (email === "") {
-      alert("Please enter your email.");
-    } else if (!email.includes("@")) {
-      alert("Please enter valid email.");
-    } else if (password === "") {
-      alert("Please enter your password.");
-    } else if (password.length < 8) {
-      alert("Password must be longer than 8 character.");
-    } else {
-      // console.log("Login successful...");
-      try {
-        const data = await axios.post(
-          "http://localhost:5000/api/auth/login",
-          inputValue
-        );
-        // alert("logged in");
-
-        const result = await data.data; //returns data ie. payload
-        console.log(result);
-        const res = await data.status;
-        console.log(res);
-        if (res === 200) {
-          setInputValue({
-            ...inputValue,
-            email: "",
-            password: "",
-          });
-          navigate("/");
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
   return (
-    <>
-      <section>
-        <div className="form_data">
-          <div className="form_heading">
-            <h1>Welcome Back, Log In</h1>
-            <p>Hi, we are glad you are back. Please login.</p>
-          </div>
+    <div className="login">
+      <Row gutter={16} className="d-flex align-items-center">
+        <Col lg={16} style={{ position: "relative" }}>
+          <img
+            src="https://images.unsplash.com/photo-1485291571150-772bcfc10da5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8YmxhY2slMjBjYXJ8ZW58MHx8MHx8&w=1000&q=80"
+            alt=""
+          />
+          <h1 className="login-logo">Rent A Vehicle</h1>
+        </Col>
+        <Col lg={8} className="text-left p-5">
+          <Form
+            layout="vertical"
+            className="login-form p-5"
+            onFinish={onFinish}
+          >
+            <h1>Login</h1>
+            <hr />
+            <Form.Item
+              name="username"
+              label="Username"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              label="Password"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <button className="loginBtn ">Login</button>
 
-          <form>
-            <div className="form_input">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Enter your email address"
-                value={inputValue.email}
-                onChange={setValue}
-              />
-              <label htmlFor="password">Password</label>
-              <div className="two">
-                <input
-                  type={!showPassword ? "password" : "text"}
-                  name="password"
-                  id="password"
-                  placeholder="Enter your password"
-                  value={inputValue.password}
-                  onChange={setValue}
-                />
-                <div
-                  className="showpass"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {!showPassword ? "Show" : "Hide"}
-                </div>
-              </div>
-            </div>
-            <button className="btn" onClick={loginUser}>
-              Login
-            </button>
-            <p>
-              Don't have an Account?{" "}
-              <NavLink to="/register" style={{ textDecoration: "none" }}>
-                Sign Up
-              </NavLink>
-            </p>
-          </form>
-        </div>
-      </section>
-    </>
+            <br />
+            <Link to="/register" style={{ textDecoration: "none" }}>
+              Not Registered? Click here to Register
+            </Link>
+          </Form>
+        </Col>
+      </Row>
+    </div>
   );
 };
 
