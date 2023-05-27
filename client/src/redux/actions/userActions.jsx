@@ -9,6 +9,7 @@ export const userLogin = (reqObj) => async (dispatch) => {
       "http://localhost:5000/api/auth/login",
       reqObj
     );
+    console.log(response.data);
     localStorage.setItem("user", JSON.stringify(response.data));
     message.success("Login Success");
     dispatch({ type: "LOADING", payload: false });
@@ -16,7 +17,7 @@ export const userLogin = (reqObj) => async (dispatch) => {
       window.location.href = "/";
     }, 500);
   } catch (err) {
-    message.error("Something went wrong");
+    message.error("Wrong Credentials");
     dispatch({ type: "LOADING", payload: false });
   }
 };
@@ -25,6 +26,8 @@ export const userRegister = (reqObj) => async (dispatch) => {
   dispatch({ type: "LOADING", payload: true });
 
   try {
+    const obj = reqObj;
+    console.log(obj);
     const response = await axios.post(
       "http://localhost:5000/api/auth/register",
       reqObj

@@ -3,6 +3,7 @@ import { Row, Col, Form, Input } from "antd";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../redux/actions/userActions";
+import Password from "antd/es/input/Password";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ const Login = () => {
               <Input />
             </Form.Item>
             <Form.Item
+              type="password"
               name="password"
               label="Password"
               rules={[{ required: true }]}

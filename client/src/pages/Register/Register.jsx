@@ -1,14 +1,20 @@
 import React from "react";
-import { Row, Col, Form, Input } from "antd";
+import { useState } from "react";
+import { Row, Col, Form, Input, Radio } from "antd";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userRegister } from "../../redux/actions/userActions";
 
 const Register = () => {
+  const [value, setValue] = useState();
+  const onChange = (e) => {
+    console.log("radio checked", e.target.value);
+    setValue(e.target.value);
+  };
   const dispatch = useDispatch();
   const onFinish = (values) => {
-    dispatch(userRegister(values));
     console.log(values);
+    dispatch(userRegister(values, value));
   };
   return (
     <div className="login">
@@ -38,17 +44,27 @@ const Register = () => {
             <Form.Item
               name="password"
               label="Password"
+              // type="password"
               rules={[{ required: true }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
+              // type="password"
               name="confirmPassword"
               label="Confirm Password"
               rules={[{ required: true }]}
             >
               <Input />
             </Form.Item>
+            <Radio.Group value={value} onChange={onChange} name="admin">
+              <Radio value={1} name="admin">
+                SignUp as Renter
+              </Radio>
+              <Radio value={2} name="admin">
+                SignUp as Customer
+              </Radio>
+            </Radio.Group>
             <button className="loginBtn">Register</button>
             <br />
             <Link style={{ textDecoration: "none" }} to="/login">

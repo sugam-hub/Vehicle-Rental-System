@@ -10,18 +10,29 @@ import {
   Route,
   Routes,
   Navigate,
+  Link,
 } from "react-router-dom";
 
 const App = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <>
       {/* <Header /> */}
       <Router>
         <Routes>
-          <Route path="/" exact element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="book" element={<BookingVehicle />} />
+          <Route
+            path="*"
+            element={
+              <ProtectedRoute>
+                <Route path="/" element={<Home />} />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/login" exact element={<Login />} />
+          <Route path="/register" exact element={<Register />} />
+          {/* <Route path="booking" element={<ProtectedRoute></ProtectedRoute>} /> */}
+          <Route path="/booking/:carid" element={<BookingVehicle />} />
         </Routes>
       </Router>
     </>
@@ -29,3 +40,15 @@ const App = () => {
 };
 
 export default App;
+
+export function ProtectedRoute(props) {
+  if (localStorage.getItem("user")) {
+    return (
+      <Routes>
+        <Route {...props} />;
+      </Routes>
+    );
+  } else {
+    return <Navigate replace to="/login" />;
+  }
+}

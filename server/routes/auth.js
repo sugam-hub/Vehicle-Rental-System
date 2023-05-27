@@ -5,18 +5,15 @@ const CryptoJS = require("crypto-js");
 
 // REGISTER
 router.post("/register", async (req, res) => {
+  const { username, password, confirmPassword, admin } = req.body;
   const newUser = new User({
-    name: req.body.username,
-    // email: req.body.email,
-    password: CryptoJS.AES.encrypt(
-      req.body.password,
-      process.env.PASS_SEC
-    ).toString(),
+    name: username,
+    password: CryptoJS.AES.encrypt(password, process.env.PASS_SEC).toString(),
     confirmPassword: CryptoJS.AES.encrypt(
-      req.body.password,
+      confirmPassword,
       process.env.PASS_SEC
     ).toString(),
-    // isBusinessOwner: req.body.admin,
+    isAdmin: admin,
   });
 
   try {
@@ -40,22 +37,21 @@ router.post("/login", async (req, res) => {
       process.env.PASS_SEC
     ).toString(CryptoJS.enc.Utf8);
 
-    // const accessToken = jwt.sign(
-    //   {
-    //     id: user._id,
-    //     // isAdmin: user.isAdmin,
-    //   },
-    //   process.env.JWT_SEC,
-    //   {
-    //     expiresIn: "3d",
-    //   }
-    // );
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.JWT_SEC,
+      {
+        expiresIn: "3d",
+      }
+    );
 
     if (hashedPassword !== req.body.password) {
       return res.status(401).json("Wrong Credentials!!!");
     } else {
       const { password, confirmPassword, ...otherInfo } = user._doc;
-      return res.status(200).json({ status: 200, otherInfo });
+      return res.status(200).json({ status: 200, otherInfo, accessToken });
     }
   } catch (err) {
     return res.status(500).json(err);
