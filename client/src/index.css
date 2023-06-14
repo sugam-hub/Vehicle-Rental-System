@@ -211,6 +211,14 @@ button{
 .carimg2{
     height: 400px;
     border-radius: 10px;
-    width: 700px; /*make it auto*/
-    
+    width: 700px; /*make it auto*/  
+}
+
+svg{
+    height: 20px !important;
+    width: 20px !important;
+}
+
+:where(.css-dev-only-do-not-override-htwhyh).ant-btn.ant-btn-sm {
+    height: 40px;
 }

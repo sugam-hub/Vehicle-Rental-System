@@ -5,7 +5,6 @@ import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
 import { useParams } from "react-router-dom";
 import Spinner from "../../components/Spinner/Spinner";
 import { Row, Col, Divider, DatePicker, Checkbox, Modal } from "antd";
-import momemt from "moment";
 import moment from "moment";
 import { bookCar } from "../../redux/actions/bookingActions";
 

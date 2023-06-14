@@ -23,7 +23,7 @@ const DefaultLayout = (props) => {
       label: (
         <li
           onClick={() => {
-            window.location.href = "/booking";
+            window.location.href = "/booking/userbookings";
           }}
         >
           Booking
@@ -33,9 +33,13 @@ const DefaultLayout = (props) => {
     {
       key: "3",
       label: (
-        <a style={{ textDecoration: "none" }} href="https://www.aliyun.com">
-          Profile
-        </a>
+        <li
+          onClick={() => {
+            window.location.href = "/admin";
+          }}
+        >
+          Admin
+        </li>
       ),
     },
     {

@@ -19,22 +19,48 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-//POST CAR
-router.post("/postcar", upload.single("image"), async (req, res) => {
+//ADD NEW CAR
+router.post("/addcar", upload.single("image"), async (req, res) => {
   const newCar = new Car({
     name: req.body.name,
     price: req.body.price,
     fuelType: req.body.fuelType,
-    price: req.body.price,
     capacity: req.body.capacity,
-    image: req.file.path,
+    image: req.body.image,
   });
 
   try {
     const savedCar = await newCar.save();
     return res.status(200).json(savedCar);
   } catch (err) {
-    return res.status(500).json(err);
+    return res.status(403).json(err);
+  }
+});
+
+//EDIT CAR
+router.post("/editcar", async (req, res) => {
+  try {
+    const car = await Car.findOne({ _id: req.body._id });
+    (car.name = req.body.name),
+      (car.price = req.body.price),
+      (car.fuelType = req.body.fuelType),
+      (car.capacity = req.body.capacity),
+      (car.image = req.body.image),
+      await car.save();
+    return res.status(200).json(car);
+  } catch (err) {
+    return res.status(402).json(err);
+  }
+});
+
+//DELETE CAR
+router.post("/deletecar", async (req, res) => {
+  try {
+    await Car.findOneAndDelete({ _id: req.body.carid });
+
+    return res.status(200).json("Car deleted successfully...");
+  } catch (err) {
+    return res.status(402).json(err);
   }
 });
 
@@ -61,6 +87,17 @@ router.post("/bookcar", async (req, res) => {
     car.bookedTimeSlots.push(req.body.bookedTimeSlots);
     await car.save();
     return res.status(200).json("Your booking has been placed successfully");
+  } catch (err) {
+    return res.status(400).json(err);
+  }
+});
+
+//Get All Bookings
+router.get("/getallbookings", async (req, res) => {
+  try {
+    const bookings = await Booking.find().populate("car");
+    // bookings.car = await Car.findById();
+    return res.status(200).json(bookings);
   } catch (err) {
     return res.status(400).json(err);
   }

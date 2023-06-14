@@ -12,6 +12,10 @@ import {
   Navigate,
   Link,
 } from "react-router-dom";
+import UserBookings from "./pages/UserBookings/UserBookings";
+import AddCar from "./pages/AddCar/AddCar";
+import AdminHome from "./pages/Admin/AdminHome";
+import EditCar from "./pages/EditCar/EditCar";
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -31,8 +35,12 @@ const App = () => {
           />
           <Route path="/login" exact element={<Login />} />
           <Route path="/register" exact element={<Register />} />
-          {/* <Route path="booking" element={<ProtectedRoute></ProtectedRoute>} /> */}
+          <Route path="booking" element={<ProtectedRoute></ProtectedRoute>} />
           <Route path="/booking/:carid" element={<BookingVehicle />} />
+          <Route path="/booking/userbookings" element={<UserBookings />} />
+          <Route path="/addcar" element={<AddCar />} />
+          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/editcar/:carid" element={<EditCar />} />
         </Routes>
       </Router>
     </>
