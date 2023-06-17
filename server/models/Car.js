@@ -10,6 +10,9 @@ const CarSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    lat: { type: String },
+    lon: { type: String },
+    address: { type: String },
     bookedTimeSlots: [
       {
         from: { type: String, required: true },

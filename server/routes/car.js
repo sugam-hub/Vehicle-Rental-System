@@ -27,6 +27,7 @@ router.post("/addcar", upload.single("image"), async (req, res) => {
     fuelType: req.body.fuelType,
     capacity: req.body.capacity,
     image: req.body.image,
+    address: req.body.address,
   });
 
   try {
@@ -98,6 +99,25 @@ router.get("/getallbookings", async (req, res) => {
     const bookings = await Booking.find().populate("car");
     // bookings.car = await Car.findById();
     return res.status(200).json(bookings);
+  } catch (err) {
+    return res.status(400).json(err);
+  }
+});
+
+//SEARCH CAR
+router.get("/search", async (req, res) => {
+  try {
+    var search = req.body.search;
+    var carData = await Car.find({
+      name: { $regex: ".*" + search + ".*", $options: "i" },
+    });
+    if (carData.length > 0) {
+      return res
+        .status(200)
+        .send({ success: true, msg: "Product Details", data: carData });
+    } else {
+      return res.status(200).send({ success: true, msg: "Data not found!" });
+    }
   } catch (err) {
     return res.status(400).json(err);
   }

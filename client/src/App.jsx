@@ -16,6 +16,7 @@ import UserBookings from "./pages/UserBookings/UserBookings";
 import AddCar from "./pages/AddCar/AddCar";
 import AdminHome from "./pages/Admin/AdminHome";
 import EditCar from "./pages/EditCar/EditCar";
+import Address from "./components/Address/Address";
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -41,6 +42,7 @@ const App = () => {
           <Route path="/addcar" element={<AddCar />} />
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/editcar/:carid" element={<EditCar />} />
+          <Route path="/address" element={<Address />} />
         </Routes>
       </Router>
     </>

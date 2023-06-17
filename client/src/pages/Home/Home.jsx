@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
 import { getAllCars } from "../../redux/actions/carsAction";
-import { Row, Col, Divider, DatePicker, Checkbox } from "antd";
+import { Row, Col, Divider, DatePicker, Checkbox, Input } from "antd";
 import { Link } from "react-router-dom";
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import Spinner from "../../components/Spinner/Spinner";
@@ -14,6 +14,7 @@ const Home = () => {
   const { loading } = useSelector((state) => state.alertsReducer);
   const [totalCars, setTotalCars] = useState([]);
   const dispatch = useDispatch();
+  const { Search } = Input;
 
   useEffect(() => {
     dispatch(getAllCars());
@@ -50,6 +51,8 @@ const Home = () => {
     setTotalCars(temp);
   };
 
+  const onSearch = () => {};
+
   return (
     // gutter is used for margin
     <>
@@ -62,6 +65,20 @@ const Home = () => {
             format="MMM DD YYYY HH:mm"
             onChange={setFilter}
           />
+          <Col
+            lg={8}
+            sm={24}
+            className="d-flex"
+            style={{ marginLeft: "200px" }}
+          >
+            <Search
+              placeholder="Search for car"
+              allowClear
+              enterButton="Search"
+              size="large"
+              onSearch={onSearch}
+            />
+          </Col>
         </Col>
       </Row>
 

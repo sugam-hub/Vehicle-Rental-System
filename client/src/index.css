@@ -11,7 +11,7 @@
 body{
     font-family: 'Montserrat', sans-serif !important;
     background-color: azure;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 /*bs = box shadow */
@@ -221,4 +221,9 @@ svg{
 
 :where(.css-dev-only-do-not-override-htwhyh).ant-btn.ant-btn-sm {
     height: 40px;
+}
+
+.map-container{
+    width: 100%;
+    height: 100vh;
 }
