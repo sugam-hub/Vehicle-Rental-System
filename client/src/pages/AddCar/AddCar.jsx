@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
 import { Col, Row, Form, Input, Divider } from "antd";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,27 +21,41 @@ const AddCar = () => {
 
   const [searchText, setSearchText] = useState("");
   const [listPlace, setListPlace] = useState([]);
-  const [selectPosition, setSelectPosition] = useState(null);
-  const [address, setAddress] = useState("");
-  console.log(selectPosition);
+  const [selectPosition, setSelectPosition] = useState("");
+  const [address, setAddress] = useState("asdasd");
 
-  console.log(address);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user.otherInfo._id;
+
   const lat = selectPosition?.lat;
   const lon = selectPosition?.lon;
-  console.log(lat, lon);
 
-  const changeAddress = async (item) => {
+  const changeAddress = (item) => {
+    console.log("ITEM", item);
     setSelectPosition(item);
-    setAddress(selectPosition?.display_name);
+    console.log("AD", address);
+    // setSearchText(address);
+    // console.log(fixAddress());
   };
+
+  // const fixAddress = () => {
+  //   return address;
+  // };
 
   const onFinish = (values) => {
     values.bookedTimeSlots = [];
     values.lat = lat;
     values.lon = lon;
+    values.user = userId;
     dispatch(addCar(values));
     console.log(values);
   };
+
+  // const fixAddress = () => {
+  //   useEffect(() => {
+  //     setAddress(selectPosition?.display_name);
+  //   }, [address]);
+  // };
 
   return (
     <>
@@ -95,6 +109,7 @@ const AddCar = () => {
             >
               <Input
                 value={address}
+                // initialValue={address}
                 onChange={(event) => {
                   setSearchText(event.target.value);
                 }}
@@ -107,6 +122,7 @@ const AddCar = () => {
           <button
             className="loginBtn"
             onClick={() => {
+              console.log(address);
               const params = {
                 q: searchText,
                 format: "json",
@@ -137,9 +153,13 @@ const AddCar = () => {
                 <div key={item?.place_id}>
                   <ListItem
                     button
-                    onClick={async () => {
+                    onClick={() => {
                       // setSelectPosition(item);
-                      await changeAddress(item);
+                      console.log("HERE", item);
+                      console.log("HERE", item.display_name);
+
+                      setAddress(item.display_name) && console.log(address);
+                      // setAddress(item[0]?.display_name);
                     }}
                   >
                     <ListItemIcon>
@@ -167,6 +187,7 @@ const AddCar = () => {
           {/* </Form> */}
         </Col>
       </Row>
+      {/* <Address /> */}
     </>
   );
 };

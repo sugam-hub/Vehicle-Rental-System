@@ -16,6 +16,8 @@ const Home = () => {
   const dispatch = useDispatch();
   const { Search } = Input;
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
   useEffect(() => {
     dispatch(getAllCars());
   }, []);
@@ -84,33 +86,35 @@ const Home = () => {
 
       {loading == true && <Spinner />}
       <Row justify="center" gutter={16}>
-        {totalCars.map((car) => {
-          const { name, price, image, _id } = car;
-          return (
-            <Col key={_id} lg={5} sm={24} xs={24}>
-              <div className="car p-2 bs1">
-                <img src={image} className="carimg" />
+        {totalCars
+          .filter((o) => o.user !== user.otherInfo._id)
+          .map((car) => {
+            const { name, price, image, _id } = car;
+            return (
+              <Col key={_id} lg={5} sm={24} xs={24}>
+                <div className="car p-2 bs1">
+                  <img src={image} className="carimg" />
 
-                <div className="car-content d-flex align-items-center justify-content-between">
-                  <div className="text-left pl-2">
-                    <p>{name}</p>
-                    <p>Rent Per Hour {price} /-</p>
-                  </div>
-                  <div>
-                    <button className="btn1">
-                      <Link
-                        to={`/booking/${_id}`}
-                        style={{ textDecoration: "none" }}
-                      >
-                        Book Now
-                      </Link>
-                    </button>
+                  <div className="car-content d-flex align-items-center justify-content-between">
+                    <div className="text-left pl-2">
+                      <p>{name}</p>
+                      <p>Rent Per Hour {price} /-</p>
+                    </div>
+                    <div>
+                      <button className="btn1">
+                        <Link
+                          to={`/booking/${_id}`}
+                          style={{ textDecoration: "none" }}
+                        >
+                          Book Now
+                        </Link>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Col>
-          );
-        })}
+              </Col>
+            );
+          })}
       </Row>
     </>
   );

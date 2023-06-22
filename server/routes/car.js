@@ -7,6 +7,7 @@ const {
 } = require("./verifyToken");
 const multer = require("multer");
 const Booking = require("../models/Booking");
+const BookingStatus = require("../models/BookingStatus");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -28,6 +29,9 @@ router.post("/addcar", upload.single("image"), async (req, res) => {
     capacity: req.body.capacity,
     image: req.body.image,
     address: req.body.address,
+    lat: req.body.lat,
+    lon: req.body.lon,
+    user: req.body.user,
   });
 
   try {
@@ -120,6 +124,32 @@ router.get("/search", async (req, res) => {
     }
   } catch (err) {
     return res.status(400).json(err);
+  }
+});
+
+//DELETE BOOKING
+router.post("/deletebooking", async (req, res) => {
+  try {
+    await Booking.findOneAndDelete({ _id: req.body.bookingid });
+
+    return res.status(200).json("Booking deleted successfully...");
+  } catch (err) {
+    return res.status(402).json(err);
+  }
+});
+
+// BOOKING ACCEPT OR REJECT STATUS
+router.post("/status", async (req, res) => {
+  try {
+    const newStatus = new BookingStatus({
+      car: req.body.car,
+      user: req.body.user,
+      status: req.body.status,
+    });
+    const savedStatus = await newStatus.save();
+    return res.status(200).json(savedStatus);
+  } catch (err) {
+    return res.status(403).json(err);
   }
 });
 

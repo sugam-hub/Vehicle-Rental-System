@@ -17,6 +17,7 @@ const AdminHome = () => {
   const { loading } = useSelector((state) => state.alertsReducer);
   const [totalCars, setTotalCars] = useState([]);
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     dispatch(getAllCars());
@@ -43,47 +44,49 @@ const AdminHome = () => {
 
       {loading == true && <Spinner />}
       <Row justify="center" gutter={16}>
-        {totalCars.map((car) => {
-          const { name, price, image, _id } = car;
-          return (
-            <Col key={_id} lg={5} sm={24} xs={24}>
-              <div className="car p-2 bs1">
-                <img src={image} className="carimg" />
+        {totalCars
+          .filter((o) => o.user == user.otherInfo._id)
+          .map((car) => {
+            const { name, price, image, _id } = car;
+            return (
+              <Col key={_id} lg={5} sm={24} xs={24}>
+                <div className="car p-2 bs1">
+                  <img src={image} className="carimg" />
 
-                <div className="car-content d-flex align-items-center justify-content-between">
-                  <div className="text-left pl-2">
-                    <p>{name}</p>
-                    <p>Rent Per Hour {price} /-</p>
-                  </div>
-                  <div className="mr-4">
-                    <Link to={`/editcar/${car._id}`}>
-                      <EditOutlined
-                        style={{
-                          marginRight: "15px",
-                          color: "green",
-                          cursor: "pointer",
+                  <div className="car-content d-flex align-items-center justify-content-between">
+                    <div className="text-left pl-2">
+                      <p>{name}</p>
+                      <p>Rent Per Hour {price} /-</p>
+                    </div>
+                    <div className="mr-4">
+                      <Link to={`/editcar/${car._id}`}>
+                        <EditOutlined
+                          style={{
+                            marginRight: "15px",
+                            color: "green",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </Link>
+                      <Popconfirm
+                        title="Delete the task"
+                        description="Are you sure to delete this car?"
+                        onConfirm={() => {
+                          dispatch(deleteCar({ carid: car._id }));
                         }}
-                      />
-                    </Link>
-                    <Popconfirm
-                      title="Delete the task"
-                      description="Are you sure to delete this car?"
-                      onConfirm={() => {
-                        dispatch(deleteCar({ carid: car._id }));
-                      }}
-                      okText="Yes"
-                      cancelText="No"
-                    >
-                      <DeleteOutlined
-                        style={{ color: "red", cursor: "pointer" }}
-                      />
-                    </Popconfirm>
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <DeleteOutlined
+                          style={{ color: "red", cursor: "pointer" }}
+                        />
+                      </Popconfirm>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Col>
-          );
-        })}
+              </Col>
+            );
+          })}
       </Row>
     </>
   );

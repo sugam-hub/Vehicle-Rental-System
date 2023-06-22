@@ -16,7 +16,6 @@ const BookingVehicle = ({ match }) => {
   const [car, setCar] = useState({});
   const dispatch = useDispatch();
   const id = useParams();
-  console.log(id);
 
   const [from, setFrom] = useState();
   const [to, setTo] = useState();

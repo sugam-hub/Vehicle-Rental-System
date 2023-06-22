@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
-import { getAllBookings } from "../../redux/actions/bookingActions";
-import { Col, Row } from "antd";
+import {
+  getAllBookings,
+  deleteBooking,
+} from "../../redux/actions/bookingActions";
+import { Col, Row, Popconfirm } from "antd";
 import moment from "moment";
 import Spinner from "../../components/Spinner/Spinner";
 
@@ -11,6 +14,7 @@ const UserBookings = () => {
   const { bookings } = useSelector((state) => state.bookingsReducer);
   const { loading } = useSelector((state) => state.alertsReducer);
   const user = JSON.parse(localStorage.getItem("user"));
+  const [totalBookings, setTotalBookings] = useState([]);
 
   useEffect(() => {
     dispatch(getAllBookings());
@@ -57,6 +61,17 @@ const UserBookings = () => {
                         Date of booking:{" "}
                         <b>{moment(booking.createdAt).format("MMM DD yyyy")}</b>
                       </p>
+                      <Popconfirm
+                        title="Delete the task"
+                        description="Are you sure to delete this booking?"
+                        onConfirm={() => {
+                          dispatch(deleteBooking({ bookingid: booking._id }));
+                        }}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <button className="loginBtn">Delete Booking</button>
+                      </Popconfirm>
                     </Col>
                     <Col lg={6} sm={24} className="text-right">
                       <img

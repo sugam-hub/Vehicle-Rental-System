@@ -66,6 +66,9 @@ const DefaultLayout = (props) => {
                 <Link to="/" style={{ textDecoration: "none" }}>
                   <h1>Rent a Vehicle</h1>
                 </Link>
+                <Link to="/notification" style={{ textDecoration: "none" }}>
+                  <h1>Notification</h1>
+                </Link>
                 <Space direction="vertical">
                   <Space wrap>
                     <Dropdown

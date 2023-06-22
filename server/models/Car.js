@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const CarSchema = new mongoose.Schema(
   {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     name: { type: String, required: true },
     fuelType: { type: String, required: true },
     capacity: { type: String, required: true },

@@ -17,6 +17,8 @@ import AddCar from "./pages/AddCar/AddCar";
 import AdminHome from "./pages/Admin/AdminHome";
 import EditCar from "./pages/EditCar/EditCar";
 import Address from "./components/Address/Address";
+import SingleField from "./pages/AddCar/SingleField";
+import Notification from "./pages/Notification/Notification";
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -43,6 +45,8 @@ const App = () => {
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/editcar/:carid" element={<EditCar />} />
           <Route path="/address" element={<Address />} />
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/single" element={<SingleField />} />
         </Routes>
       </Router>
     </>
