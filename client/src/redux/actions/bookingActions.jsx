@@ -24,6 +24,7 @@ export const carStatusAccepted = (reqObj) => async (dispatch) => {
   try {
     await axios.post("http://localhost:5000/api/auth/status", reqObj);
     dispatch({ type: "LOADING", payload: false });
+    // console.log(data);
     message.success("You ACCEPTED the booking");
     setTimeout(() => {
       window.location.href("/userbookings");

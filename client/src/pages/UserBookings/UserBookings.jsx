@@ -15,6 +15,7 @@ const UserBookings = () => {
   const { loading } = useSelector((state) => state.alertsReducer);
   const user = JSON.parse(localStorage.getItem("user"));
   const [totalBookings, setTotalBookings] = useState([]);
+  console.log(user);
 
   useEffect(() => {
     dispatch(getAllBookings());
@@ -29,7 +30,7 @@ const UserBookings = () => {
         <Row justify="center" gutter={16}>
           <Col lg={20} sm={24}>
             {bookings
-              .filter((o) => o.user == user.otherInfo._id)
+              .filter((o) => o.user._id == user.otherInfo._id)
               .map((booking) => {
                 return (
                   <Row gutter={16} className="bs1 mt-3 text-left">
@@ -45,6 +46,12 @@ const UserBookings = () => {
                       </p>
                       <p>
                         Total amount: <b>{booking.totalAmount}</b>
+                      </p>
+                      <p>
+                        Location: <b>{booking.car.address}</b>
+                      </p>
+                      <p>
+                        Phone number: <b>{booking.car.phone}</b>
                       </p>
                     </Col>
                     <Col lg={12} sm={24}>

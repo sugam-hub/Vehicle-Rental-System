@@ -84,6 +84,8 @@ const BookingVehicle = ({ match }) => {
             <p>{car.price} Rent per hour /-</p>
             <p>Fuel Type = {car.fuelType}</p>
             <p>Max Persons = {car.capacity}</p>
+            <p>Location = {car.address}</p>
+            <p>Phone Number = {car.phone}</p>
           </div>
 
           <Divider type="horizontal" dashed>

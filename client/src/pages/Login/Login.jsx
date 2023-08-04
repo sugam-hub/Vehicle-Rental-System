@@ -44,7 +44,7 @@ const Login = () => {
             >
               <Input />
             </Form.Item>
-            <button className="loginBtn ">Login</button>
+            <button className="loginBtn">Login</button>
 
             <br />
             <Link to="/register" style={{ textDecoration: "none" }}>

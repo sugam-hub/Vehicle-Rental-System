@@ -7,13 +7,22 @@ const CarSchema = new mongoose.Schema(
     fuelType: { type: String, required: true },
     capacity: { type: String, required: true },
     price: { type: Number, required: true },
+    phone: { type: String },
     image: {
       type: String,
       required: true,
     },
-    lat: { type: String },
-    lon: { type: String },
-    address: { type: String },
+    // coordinates: [
+    //   {
+    //     lon: { type: String },
+    //     lat: { type: String },
+    //   },
+    // ],
+    location: {
+      type: { type: String },
+      coordinates: { type: Array },
+    },
+    address: { type: String, require: true },
     bookedTimeSlots: [
       {
         from: { type: String, required: true },
@@ -23,5 +32,7 @@ const CarSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+CarSchema.index({ location: "2dsphere" });
 
 module.exports = mongoose.model("Car", CarSchema);

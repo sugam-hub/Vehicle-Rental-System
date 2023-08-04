@@ -2,18 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
 import { getAllCars } from "../../redux/actions/carsAction";
+import { getAllSearch } from "../../redux/actions/searchAction";
 import { Row, Col, Divider, DatePicker, Checkbox, Input } from "antd";
 import { Link } from "react-router-dom";
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import Spinner from "../../components/Spinner/Spinner";
 import moment from "moment";
+import DefaultLayout1 from "../../components/DefaultLayout/DefaultLayout";
 const { RangePicker } = DatePicker;
 
 const Home = () => {
   const { cars } = useSelector((state) => state.vehiclesReducer);
   const { loading } = useSelector((state) => state.alertsReducer);
+  const { search } = useSelector((state) => state.searchReducer);
   const [totalCars, setTotalCars] = useState([]);
+  const [totalSearch, setTotalSearch] = useState([]);
   const dispatch = useDispatch();
+  const [searchInput, setSearchInput] = useState("");
   const { Search } = Input;
 
   const user = JSON.parse(localStorage.getItem("user"));
@@ -25,6 +30,10 @@ const Home = () => {
   useEffect(() => {
     setTotalCars(cars);
   }, [cars]);
+
+  // useEffect(() => {
+  //   dispatch(getAllSearch());
+  // });
 
   // Filtering on the basic of availability
   const setFilter = (values) => {
@@ -53,7 +62,14 @@ const Home = () => {
     setTotalCars(temp);
   };
 
-  const onSearch = () => {};
+  const handleSearch = async (e) => {
+    try {
+      const result = await dispatch(getAllSearch(searchInput));
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     // gutter is used for margin
@@ -78,7 +94,9 @@ const Home = () => {
               allowClear
               enterButton="Search"
               size="large"
-              onSearch={onSearch}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onSearch={handleSearch}
             />
           </Col>
         </Col>

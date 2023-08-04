@@ -1,94 +1,198 @@
-import React from "react";
-import "./defaultLayout.css";
-import { Button, Dropdown, Space, Row, Col } from "antd";
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import { NotificationsNone } from "@mui/icons-material/";
 import { Link } from "react-router-dom";
 
-const DefaultLayout = (props) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const items = [
-    {
-      key: "1",
-      label: (
-        <li
-          onClick={() => {
-            window.location.href = "/";
-          }}
-        >
-          Home
-        </li>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <li
-          onClick={() => {
-            window.location.href = "/booking/userbookings";
-          }}
-        >
-          Booking
-        </li>
-      ),
-    },
-    {
-      key: "3",
-      label: (
-        <li
-          onClick={() => {
-            window.location.href = "/admin";
-          }}
-        >
-          Admin
-        </li>
-      ),
-    },
-    {
-      key: "4",
-      label: (
-        <li
-          onClick={() => {
-            localStorage.removeItem("user");
-            window.location.href = "/login";
-          }}
-        >
-          Logout
-        </li>
-      ),
-    },
-  ];
+const DefaultLayout = () => {
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   return (
-    <>
-      <div>
-        <div className="header bs1">
-          <Row gutter={16} justify="center">
-            <Col lg={20} sm={24} xs={24}>
-              <div className="d-flex justify-content-between">
-                <Link to="/" style={{ textDecoration: "none" }}>
-                  <h1>Rent a Vehicle</h1>
-                </Link>
-                <Link to="/notification" style={{ textDecoration: "none" }}>
-                  <h1>Notification</h1>
-                </Link>
-                <Space direction="vertical">
-                  <Space wrap>
-                    <Dropdown
-                      menu={{
-                        items,
-                      }}
-                      placement="bottomLeft"
-                    >
-                      <Button>{user.otherInfo.name}</Button>
-                    </Dropdown>
-                  </Space>
-                </Space>
-              </div>
-            </Col>
-          </Row>
-        </div>
-        <div className="content"></div>
-      </div>
-    </>
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            RENT A VEHICLE
+          </Typography>
+
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">
+                  <Link
+                    style={{ textDecoration: "none", color: "white" }}
+                    to="/"
+                  >
+                    Home
+                  </Link>
+                </Typography>
+              </MenuItem>
+
+              <MenuItem>
+                <Typography
+                  textAlign="center"
+                  onClick={() => {
+                    window.location.href = "/booking/userbookings";
+                  }}
+                >
+                  Bookings
+                </Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
+
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Button
+              onClick={() => {
+                window.location.href = "/";
+              }}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Home
+            </Button>
+            <Button
+              onClick={() => {
+                window.location.href = "/booking/userbookings";
+              }}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Bookings
+            </Button>
+            <Button
+              onClick={() => {
+                window.location.href = "/admin";
+              }}
+              sx={{ my: 2, color: "white", display: "block" }}
+            >
+              Add Car
+            </Button>
+          </Box>
+
+          <Link to="/notification" style={{ textDecoration: "none" }}>
+            <NotificationsNone
+              style={{
+                color: "orangered",
+                marginLeft: "700px",
+                marginTop: "6px",
+              }}
+            />
+          </Link>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography
+                  textAlign="center"
+                  onClick={() => {
+                    window.location.href = "/profile";
+                  }}
+                >
+                  Profile
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography
+                  textAlign="center"
+                  onClick={() => {
+                    localStorage.removeItem("user");
+                    window.location.href = "/login";
+                  }}
+                >
+                  Logout
+                </Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
-
 export default DefaultLayout;

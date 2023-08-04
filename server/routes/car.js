@@ -21,17 +21,29 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 //ADD NEW CAR
-router.post("/addcar", upload.single("image"), async (req, res) => {
+router.post("/addcar", async (req, res) => {
+  const {
+    user,
+    name,
+    fuelType,
+    capacity,
+    price,
+    phone,
+    image,
+    location,
+    address,
+  } = req.body;
+
   const newCar = new Car({
-    name: req.body.name,
-    price: req.body.price,
-    fuelType: req.body.fuelType,
-    capacity: req.body.capacity,
-    image: req.body.image,
-    address: req.body.address,
-    lat: req.body.lat,
-    lon: req.body.lon,
-    user: req.body.user,
+    user,
+    name,
+    fuelType,
+    capacity,
+    price,
+    phone,
+    image,
+    location,
+    address,
   });
 
   try {
@@ -100,7 +112,7 @@ router.post("/bookcar", async (req, res) => {
 //Get All Bookings
 router.get("/getallbookings", async (req, res) => {
   try {
-    const bookings = await Booking.find().populate("car");
+    const bookings = await Booking.find().populate("car").populate("user");
     // bookings.car = await Car.findById();
     return res.status(200).json(bookings);
   } catch (err) {
@@ -118,7 +130,7 @@ router.get("/search", async (req, res) => {
     if (carData.length > 0) {
       return res
         .status(200)
-        .send({ success: true, msg: "Product Details", data: carData });
+        .send({ success: true, msg: "Car Details", data: carData });
     } else {
       return res.status(200).send({ success: true, msg: "Data not found!" });
     }
@@ -153,4 +165,29 @@ router.post("/status", async (req, res) => {
   }
 });
 
+// Find nearest vehicle
+router.post("/nearestvehicle", async (req, res) => {
+  try {
+    const latitude = req.body.latitude;
+    const longitude = req.body.longitude;
+
+    const storeDate = await Car.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          },
+          key: "location",
+          maxDistance: parseFloat(1000) * 1609,
+          distanceField: "dist.calculated",
+          spherical: true,
+        },
+      },
+    ]);
+    return res.status(200).json(storeDate);
+  } catch (err) {
+    return res.status(400).json({ success: false, err });
+  }
+});
 module.exports = router;

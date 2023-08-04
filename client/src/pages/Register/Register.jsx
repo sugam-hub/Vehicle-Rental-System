@@ -42,6 +42,20 @@ const Register = () => {
               <Input />
             </Form.Item>
             <Form.Item
+              name="address"
+              label="Address"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="phone"
+              label="Phone number"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
               name="password"
               label="Password"
               // type="password"
@@ -57,14 +71,7 @@ const Register = () => {
             >
               <Input />
             </Form.Item>
-            <Radio.Group value={value} onChange={onChange} name="admin">
-              <Radio value={1} name="admin">
-                SignUp as Renter
-              </Radio>
-              <Radio value={2} name="admin">
-                SignUp as Customer
-              </Radio>
-            </Radio.Group>
+
             <button className="loginBtn">Register</button>
             <br />
             <Link style={{ textDecoration: "none" }} to="/login">

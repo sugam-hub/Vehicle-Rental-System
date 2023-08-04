@@ -42,3 +42,52 @@ export const userRegister = (reqObj) => async (dispatch) => {
     dispatch({ type: "LOADING", payload: false });
   }
 };
+
+//GET ALL USERS
+export const getAllUsers = () => async (dispatch) => {
+  dispatch({ type: "LOADING", payload: true });
+
+  try {
+    const response = await axios.get(
+      "http://localhost:5000/api/auth/getallusers"
+    );
+    dispatch({ type: "GET_ALL_USERS", payload: response.data });
+    dispatch({ type: "LOADING", payload: false });
+  } catch (err) {
+    dispatch({ type: "LOADING", payload: false });
+  }
+};
+
+//DELETE USER
+export const deleteUser = (reqObj) => async (dispatch) => {
+  dispatch({ type: "LOADING", payload: true });
+  try {
+    await axios.post("http://localhost:5000/api/auth/deleteuser", reqObj);
+    message.success("User deleted successfully...");
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+    dispatch({ type: "LOADING", payload: false });
+  } catch (err) {
+    dispatch({ type: "LOADING", payload: false });
+  }
+};
+
+//EDIT USER
+export const editUser = (reqObj) => async (dispatch) => {
+  dispatch({ type: "LOADING", payload: true });
+
+  try {
+    await axios.put(
+      `http://localhost:5000/api/auth/edituser/${reqObj.userid}`,
+      reqObj
+    );
+    message.success("User details updated  successfully...");
+    setTimeout(() => {
+      window.location.href = "/profile";
+    }, 500);
+    dispatch({ type: "LOADING", payload: false });
+  } catch (err) {
+    dispatch({ type: "LOADING", payload: false });
+  }
+};
