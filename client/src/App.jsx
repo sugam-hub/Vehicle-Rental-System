@@ -20,6 +20,7 @@ import Notification from "./pages/Notification/Notification";
 
 import Users from "./pages/Users/Users";
 import UserProfile from "./pages/UserProfile/UserProfile";
+import AdminProfile from "./pages/AdminProfile/AdminProfile";
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -39,6 +40,7 @@ const App = () => {
             <Route path="/users" exact element={<Users />} />
             <Route path="/login" exact element={<Login />} />
             <Route path="/register" exact element={<Register />} />
+            <Route path="/adminprofile" element={<AdminProfile />} />
           </Routes>
         </Router>
       ) : (

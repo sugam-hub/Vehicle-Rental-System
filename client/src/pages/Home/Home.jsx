@@ -5,10 +5,8 @@ import { getAllCars } from "../../redux/actions/carsAction";
 import { getAllSearch } from "../../redux/actions/searchAction";
 import { Row, Col, Divider, DatePicker, Checkbox, Input } from "antd";
 import { Link } from "react-router-dom";
-import { Box, Card, CardContent, Typography } from "@mui/material";
 import Spinner from "../../components/Spinner/Spinner";
 import moment from "moment";
-import DefaultLayout1 from "../../components/DefaultLayout/DefaultLayout";
 const { RangePicker } = DatePicker;
 
 const Home = () => {
@@ -16,10 +14,10 @@ const Home = () => {
   const { loading } = useSelector((state) => state.alertsReducer);
   const { search } = useSelector((state) => state.searchReducer);
   const [totalCars, setTotalCars] = useState([]);
-  const [totalSearch, setTotalSearch] = useState([]);
   const dispatch = useDispatch();
   const [searchInput, setSearchInput] = useState("");
   const { Search } = Input;
+  const [result, setResult] = useState([]);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -65,11 +63,13 @@ const Home = () => {
   const handleSearch = async (e) => {
     try {
       const result = await dispatch(getAllSearch(searchInput));
-      console.log(result);
+      setResult(result);
     } catch (err) {
       console.log(err);
     }
   };
+
+  console.log(result);
 
   return (
     // gutter is used for margin

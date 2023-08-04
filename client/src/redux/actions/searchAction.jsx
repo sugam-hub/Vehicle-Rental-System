@@ -1,14 +1,21 @@
-export const getAllSearch = (search) => async (dispatch) => {
-  dispatch({ type: "LOADING", payload: true });
+// searchActions.js
+
+import axios from "axios";
+
+export const getAllSearch = (searchQuery) => async (dispatch) => {
+  dispatch({ type: "SEARCH_LOADING" });
 
   try {
-    const response = await axios.get(
-      "http://localhost:5000/api/auth/search",
-      search
-    );
-    dispatch({ type: "SEARCH_SUCCESS", payload: response.data });
-    dispatch({ type: "LOADING", payload: false });
+    const response = await axios.get("http://localhost:5000/api/auth/search", {
+      params: { search: searchQuery },
+    });
+
+    if (response.data.success) {
+      dispatch({ type: "SEARCH_SUCCESS", payload: response.data.data });
+    } else {
+      dispatch({ type: "SEARCH_FAILURE" });
+    }
   } catch (err) {
-    dispatch({ type: "LOADING", payload: false });
+    dispatch({ type: "SEARCH_FAILURE" });
   }
 };

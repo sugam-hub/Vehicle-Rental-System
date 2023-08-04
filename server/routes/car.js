@@ -139,6 +139,23 @@ router.get("/search", async (req, res) => {
   }
 });
 
+// router.get("/search", async (req, res) => {
+//   const { query } = req.query;
+
+//   try {
+//     let cars = await Car.find();
+//     // Filter cars based on the search query
+//     if (query) {
+//       cars = cars.filter((car) =>
+//         car.name.toLowerCase().includes(query.toLowerCase())
+//       );
+//     }
+//     res.json(cars);
+//   } catch (err) {
+//     res.status(500).json({ message: "Server Error" });
+//   }
+// });
+
 //DELETE BOOKING
 router.post("/deletebooking", async (req, res) => {
   try {

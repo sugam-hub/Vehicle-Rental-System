@@ -91,3 +91,22 @@ export const editUser = (reqObj) => async (dispatch) => {
     dispatch({ type: "LOADING", payload: false });
   }
 };
+
+// EDIT USER BY ADMIN
+export const editUserByAdmin = (reqObj) => async (dispatch) => {
+  dispatch({ type: "LOADING", payload: true });
+
+  try {
+    await axios.put(
+      `http://localhost:5000/api/auth/edituser/${reqObj.userid}`,
+      reqObj
+    );
+    message.success("User details updated  successfully...");
+    setTimeout(() => {
+      window.location.href = "/users";
+    }, 500);
+    dispatch({ type: "LOADING", payload: false });
+  } catch (err) {
+    dispatch({ type: "LOADING", payload: false });
+  }
+};

@@ -1,15 +1,25 @@
-const initialData = {
-  search: [],
+const initialState = {
+  loading: false,
+  searchResults: [],
+  error: false,
 };
 
-export const searchReducer = (state = initialData, action) => {
+export const searchReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SEARCH": {
+    case "SEARCH_LOADING":
+      return { ...state, loading: true, error: false };
+
+    case "SEARCH_SUCCESS":
       return {
         ...state,
-        search: action.payload,
+        loading: false,
+        searchResults: action.payload,
+        error: false,
       };
-    }
+
+    case "SEARCH_FAILURE":
+      return { ...state, loading: false, searchResults: [], error: true };
+
     default:
       return state;
   }
