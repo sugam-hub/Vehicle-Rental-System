@@ -3,6 +3,7 @@ import { Row, Col, Form, Input } from "antd";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../redux/actions/userActions";
+
 import Password from "antd/es/input/Password";
 
 const Login = () => {
@@ -29,11 +30,7 @@ const Login = () => {
           >
             <h1>Login</h1>
             <hr />
-            <Form.Item
-              name="username"
-              label="Username"
-              rules={[{ required: true }]}
-            >
+            <Form.Item name="email" label="Email" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
             <Form.Item

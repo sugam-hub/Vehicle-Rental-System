@@ -23,6 +23,10 @@ const BookingVehicle = ({ match }) => {
   const [driver, setDriver] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [disableFrom, setDisableFrom] = useState([]);
+  const [disableTo, setDisableTo] = useState([]);
+
+  const [disabledDateRanges, setDisabledDateRanges] = useState([]);
 
   useEffect(() => {
     if (cars.length == 0) {
@@ -42,9 +46,21 @@ const BookingVehicle = ({ match }) => {
     const to = moment(values[1].$d);
     const from = moment(values[0].$d);
     setTotalHours(to.diff(from, "hours"));
-    console.log(values);
-    console.log(totalHours);
   };
+
+  useEffect(() => {
+    if (car.bookedTimeSlots) {
+      const formattedBookedTimeSlots = car.bookedTimeSlots.map((slot) =>
+        moment(slot, "YYYY-MM-DD HH:mm")
+      );
+      setDisableFrom(
+        formattedBookedTimeSlots.map((date) => moment(date._i.from))
+      );
+      setDisableTo(formattedBookedTimeSlots.map((slot) => slot._i.to));
+      setDisabledDateRanges([disableFrom, disableTo]);
+      console.log(disabledDateRanges);
+    }
+  }, [car.bookedTimeSlots]);
 
   const bookNow = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -61,6 +77,12 @@ const BookingVehicle = ({ match }) => {
       },
     };
     dispatch(bookCar(reqObj));
+  };
+
+  const disabledDate = (current) => {
+    return disableFrom.some(
+      (fromDate, index) => current >= fromDate && current <= disableTo[index]
+    );
   };
 
   return (
@@ -106,6 +128,7 @@ const BookingVehicle = ({ match }) => {
               showTime={{ format: "HH:mm" }}
               format="MMM DD YYYY HH:mm"
               onChange={selectTimeSlots}
+              disabledDate={disabledDate}
             />
             <button
               className="bookBtn mt-2"
@@ -146,7 +169,7 @@ const BookingVehicle = ({ match }) => {
         </Col>
       </Row>
       <Modal
-        visible={showModal}
+        open={showModal}
         closable={false}
         footer={false}
         title="Booked Time Slots"

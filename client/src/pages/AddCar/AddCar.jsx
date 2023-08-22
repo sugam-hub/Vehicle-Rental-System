@@ -18,6 +18,7 @@ const AddCar = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.alertsReducer);
 
+  const [itemSelected, setItemSelected] = useState(false);
   const [address, setAddress] = useState("asdasd");
   const [searchText, setSearchText] = useState("");
   const [listPlace, setListPlace] = useState([]);
@@ -145,6 +146,8 @@ const AddCar = () => {
                         console.log("HERE", item.display_name);
                         setSelectPosition(item);
                         setAddress(item.display_name) && console.log(address);
+                        setItemSelected(true);
+                        setListPlace([]);
                       }}
                     >
                       <ListItemIcon>

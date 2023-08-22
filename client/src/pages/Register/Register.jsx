@@ -1,20 +1,44 @@
-import React from "react";
-import { useState } from "react";
-import { Row, Col, Form, Input, Radio } from "antd";
+import React, { useState } from "react";
+import { Row, Col, Form, Input, Divider } from "antd";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userRegister } from "../../redux/actions/userActions";
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+
+const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
+
+const params = {
+  q: "",
+  format: "json",
+  addressdetails: "addressdetails",
+};
 
 const Register = () => {
+  const [searchText, setSearchText] = useState("");
+  const [listPlace, setListPlace] = useState([]);
+  const [selectPosition, setSelectPosition] = useState("");
+  const [itemSelected, setItemSelected] = useState(false);
   const [value, setValue] = useState();
-  const onChange = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue(e.target.value);
+  console.log(searchText);
+  const [lat, setLat] = useState("");
+  const [lon, setLon] = useState("");
+
+  const handleListItemClick = (item) => {
+    setSelectPosition(item);
+    setSearchText(item.display_name);
+    setLat(item.lat);
+    setLon(item.lon);
+    setItemSelected(true);
+    setListPlace([]);
   };
+
   const dispatch = useDispatch();
   const onFinish = (values) => {
     console.log(values);
-    dispatch(userRegister(values, value));
+    values.address = searchText;
+    values.lat = lat;
+    values.lon = lon;
+    dispatch(userRegister(values));
   };
   return (
     <div className="login">
@@ -41,13 +65,67 @@ const Register = () => {
             >
               <Input />
             </Form.Item>
-            <Form.Item
-              name="address"
-              label="Address"
-              rules={[{ required: true }]}
-            >
+            <Form.Item name="email" label="Email" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
+            <label>Address </label>
+            <br></br>
+            <br></br>
+            <input
+              value={searchText}
+              onChange={(event) => {
+                setSearchText(event.target.value);
+              }}
+            />
+
+            <button
+              className="loginBtn"
+              onClick={(e) => {
+                e.preventDefault();
+                const params = {
+                  q: searchText,
+                  format: "json",
+                  addressdetails: 1,
+                  polygon_geojson: 0,
+                };
+                const queryString = new URLSearchParams(params).toString();
+                const requestOptions = {
+                  method: "GET",
+                  redirect: "follow",
+                };
+                fetch(`${NOMINATIM_BASE_URL}${queryString}`, requestOptions)
+                  .then((response) => response.text())
+                  .then((result) => {
+                    console.log(JSON.parse(result));
+                    setListPlace(JSON.parse(result));
+                  })
+                  .catch((err) => {
+                    console.log("err: ", err);
+                  });
+              }}
+            >
+              Search
+            </button>
+            <List component="nav" aria-label="main mailbox folders">
+              {listPlace.map((item) => {
+                return (
+                  <div key={item?.place_id}>
+                    <ListItem button onClick={() => handleListItemClick(item)}>
+                      <ListItemIcon>
+                        <img
+                          src="/placeholder.png"
+                          alt="Placeholder"
+                          style={{ width: "38px", height: "38px" }}
+                        />
+                      </ListItemIcon>
+                      <ListItemText primary={item?.display_name} />
+                    </ListItem>
+                    <Divider />
+                  </div>
+                );
+              })}
+            </List>
+
             <Form.Item
               name="phone"
               label="Phone number"
@@ -58,13 +136,11 @@ const Register = () => {
             <Form.Item
               name="password"
               label="Password"
-              // type="password"
               rules={[{ required: true }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              // type="password"
               name="confirmPassword"
               label="Confirm Password"
               rules={[{ required: true }]}

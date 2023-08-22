@@ -12,12 +12,6 @@ const CarSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // coordinates: [
-    //   {
-    //     lon: { type: String },
-    //     lat: { type: String },
-    //   },
-    // ],
     location: {
       type: { type: String },
       coordinates: { type: Array },

@@ -8,6 +8,7 @@ const {
 const multer = require("multer");
 const Booking = require("../models/Booking");
 const BookingStatus = require("../models/BookingStatus");
+const geolib = require("geolib");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -113,7 +114,6 @@ router.post("/bookcar", async (req, res) => {
 router.get("/getallbookings", async (req, res) => {
   try {
     const bookings = await Booking.find().populate("car").populate("user");
-    // bookings.car = await Car.findById();
     return res.status(200).json(bookings);
   } catch (err) {
     return res.status(400).json(err);
@@ -185,9 +185,13 @@ router.post("/status", async (req, res) => {
 // Find nearest vehicle
 router.post("/nearestvehicle", async (req, res) => {
   try {
-    const latitude = req.body.latitude;
-    const longitude = req.body.longitude;
+    let latitude = req.body.latitude;
+    let longitude = req.body.longitude;
 
+    if (!latitude && !longitude) {
+      latitude = "27.7172";
+      longitude = "85.3240";
+    }
     const storeDate = await Car.aggregate([
       {
         $geoNear: {
@@ -202,7 +206,69 @@ router.post("/nearestvehicle", async (req, res) => {
         },
       },
     ]);
+
     return res.status(200).json(storeDate);
+  } catch (err) {
+    return res.status(400).json({ success: false, err });
+  }
+});
+
+//KNN
+
+// Function to calculate Haversine distance between two points
+function haversineDistance(point1, point2) {
+  const [lat1, lon1] = point1;
+  const [lat2, lon2] = point2;
+
+  const earthRadius = 6371000; // Earth's radius in meters
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = earthRadius * c;
+
+  return distance;
+}
+// kNN algorithm implementation
+function kNearestNeighbors(data, queryPoint, k) {
+  // Calculate distances using the Haversine formula
+  data.forEach((car) => {
+    car.distance = haversineDistance(
+      [car.location.coordinates[1], car.location.coordinates[0]],
+      [queryPoint[0], queryPoint[1]]
+    );
+  });
+
+  // Sort cars based on distance
+  data.sort((a, b) => a.distance - b.distance);
+
+  // Return k nearest cars
+  return data.slice(0, k);
+}
+
+router.post("/nearestvehicles", async (req, res) => {
+  try {
+    const latitude = parseFloat(req.body.latitude) || 27.7172;
+    const longitude = parseFloat(req.body.longitude) || 85.324;
+    const maxDistance = 1000 * 1609; // 1000 miles in meters
+    const k = 3; // Number of nearest vehicles to find
+
+    // Find all cars from the database
+    const allCars = await Car.find({});
+
+    // Use the kNN algorithm to find the nearest vehicles
+    const nearestCars = kNearestNeighbors(allCars, [latitude, longitude], k);
+
+    const otherInfo = nearestCars.map((car) => {
+      const { bookedTimeSlots, ...rest } = car._doc; // Extract all car data except bookedTimeSlots
+      return rest;
+    });
+    return res.status(200).json(otherInfo);
   } catch (err) {
     return res.status(400).json({ success: false, err });
   }

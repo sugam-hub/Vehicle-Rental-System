@@ -3,10 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
 import { getAllCars } from "../../redux/actions/carsAction";
 import { getAllSearch } from "../../redux/actions/searchAction";
+
 import { Row, Col, Divider, DatePicker, Checkbox, Input } from "antd";
 import { Link } from "react-router-dom";
 import Spinner from "../../components/Spinner/Spinner";
 import moment from "moment";
+import { nearestVehicle } from "../../redux/actions/nearestVehiclesAction";
 const { RangePicker } = DatePicker;
 
 const Home = () => {
@@ -21,17 +23,22 @@ const Home = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const latitude = user.otherInfo.lat;
+  const longitude = user.otherInfo.lon;
+  console.log(latitude);
+  console.log(longitude);
+
   useEffect(() => {
     dispatch(getAllCars());
   }, []);
 
   useEffect(() => {
+    dispatch(nearestVehicle({ latitude, longitude }));
+  }, [latitude, longitude]);
+
+  useEffect(() => {
     setTotalCars(cars);
   }, [cars]);
-
-  // useEffect(() => {
-  //   dispatch(getAllSearch());
-  // });
 
   // Filtering on the basic of availability
   const setFilter = (values) => {
@@ -60,14 +67,14 @@ const Home = () => {
     setTotalCars(temp);
   };
 
-  const handleSearch = async (e) => {
-    try {
-      const result = await dispatch(getAllSearch(searchInput));
-      setResult(result);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const handleSearch = async (e) => {
+  //   try {
+  //     const result = await dispatch(getAllSearch(searchInput));
+  //     setResult(result);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   console.log(result);
 
@@ -96,7 +103,7 @@ const Home = () => {
               size="large"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              onSearch={handleSearch}
+              // onSearch={handleSearch}
             />
           </Col>
         </Col>

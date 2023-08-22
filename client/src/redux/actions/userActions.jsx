@@ -27,7 +27,6 @@ export const userRegister = (reqObj) => async (dispatch) => {
 
   try {
     const obj = reqObj;
-    console.log(obj);
     const response = await axios.post(
       "http://localhost:5000/api/auth/register",
       reqObj
@@ -38,7 +37,7 @@ export const userRegister = (reqObj) => async (dispatch) => {
     }, 500);
     dispatch({ type: "LOADING", payload: false });
   } catch (err) {
-    message.error("Something went wrong");
+    message.error("Please check for valid email and password");
     dispatch({ type: "LOADING", payload: false });
   }
 };

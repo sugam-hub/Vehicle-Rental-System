@@ -44,21 +44,39 @@ router.post("/register", async (req, res) => {
   }
 
   const validPassword = checkPasswordValidation(req.body.password);
-
+  const validEmail = checkEmail(req.body.email);
   const validPhone = checkPhone(req.body.phone);
   const validAddress = checkAddress(req.body.address);
 
-  const { username, password, confirmPassword, phone, address, admin } =
-    req.body;
+  const {
+    username,
+    email,
+    password,
+    confirmPassword,
+    phone,
+    address,
+    admin,
+    lat,
+    lon,
+  } = req.body;
+
+  const alreadyExistUser = await User.findOne({ email });
+  if (alreadyExistUser) {
+    return res
+      .status(400)
+      .json({ success: false, error: "User already exist" });
+  }
 
   if (
     validPassword &&
+    validEmail &&
     validPhone &&
     validAddress &&
     password == confirmPassword
   ) {
     const newUser = new User({
       name: username,
+      email: email,
       password: CryptoJS.AES.encrypt(password, process.env.PASS_SEC).toString(),
       confirmPassword: CryptoJS.AES.encrypt(
         confirmPassword,
@@ -67,6 +85,8 @@ router.post("/register", async (req, res) => {
       isAdmin: admin,
       phone: phone,
       address: address,
+      lat: lat,
+      lon: lon,
     });
 
     try {
@@ -76,24 +96,39 @@ router.post("/register", async (req, res) => {
       return res.status(500).json(err);
     }
   } else if (!validPassword) {
-    return res.status(403).json("Enter strong password");
+    return res
+      .status(403)
+      .json({ success: false, error: "Enter strong password" });
+  } else if (!validEmail) {
+    return res.status(403).json({ success: false, error: "Enter valid email" });
   } else if (!validPhone) {
-    return res.status(403).json("Enter valid phone number.");
+    return res
+      .status(403)
+      .json({ success: false, error: "Enter valid phone number." });
   } else if (!validAddress) {
-    return res.status(403).json("Enter valid address");
+    return res
+      .status(403)
+      .json({ success: false, error: "Enter valid address" });
   } else if (password !== confirmPassword) {
-    return res.status(402).json("Password and Confirm Password aren't same");
+    return res.status(402).json({
+      success: false,
+      error: "Password and Confirm Password aren't same",
+    });
   } else {
-    return res.status(403).json("Enter valid credentials");
+    return res
+      .status(403)
+      .json({ success: false, error: "Enter valid credentials" });
   }
 });
 
 //LOGIN
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({ name: req.body.username });
+    const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      return res.status(401).json("User not found!!!");
+      return res
+        .status(401)
+        .json({ success: false, error: "User not found!!!" });
     }
 
     const hashedPassword = CryptoJS.AES.decrypt(
