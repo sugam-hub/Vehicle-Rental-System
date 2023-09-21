@@ -1,5 +1,5 @@
 const initialData = {
-  cars: [],
+  nearestVehicles: [],
 };
 
 export const nearestVehiclesReducer = (state = initialData, action) => {
@@ -7,7 +7,7 @@ export const nearestVehiclesReducer = (state = initialData, action) => {
     case "GET_ALL_CARS": {
       return {
         ...state,
-        cars: action.payload,
+        nearestVehicles: action.payload,
       };
     }
     default:

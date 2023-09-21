@@ -8,7 +8,6 @@ const {
 const multer = require("multer");
 const Booking = require("../models/Booking");
 const BookingStatus = require("../models/BookingStatus");
-const geolib = require("geolib");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -183,38 +182,37 @@ router.post("/status", async (req, res) => {
 });
 
 // Find nearest vehicle
-router.post("/nearestvehicle", async (req, res) => {
-  try {
-    let latitude = req.body.latitude;
-    let longitude = req.body.longitude;
+// router.post("/nearestvehicle", async (req, res) => {
+//   try {
+//     let latitude = req.body.latitude;
+//     let longitude = req.body.longitude;
 
-    if (!latitude && !longitude) {
-      latitude = "27.7172";
-      longitude = "85.3240";
-    }
-    const storeDate = await Car.aggregate([
-      {
-        $geoNear: {
-          near: {
-            type: "Point",
-            coordinates: [parseFloat(longitude), parseFloat(latitude)],
-          },
-          key: "location",
-          maxDistance: parseFloat(1000) * 1609,
-          distanceField: "dist.calculated",
-          spherical: true,
-        },
-      },
-    ]);
+//     if (!latitude && !longitude) {
+//       latitude = "27.7172";
+//       longitude = "85.3240";
+//     }
+//     const storeDate = await Car.aggregate([
+//       {
+//         $geoNear: {
+//           near: {
+//             type: "Point",
+//             coordinates: [parseFloat(longitude), parseFloat(latitude)],
+//           },
+//           key: "location",
+//           maxDistance: parseFloat(1000) * 1609,
+//           distanceField: "dist.calculated",
+//           spherical: true,
+//         },
+//       },
+//     ]);
 
-    return res.status(200).json(storeDate);
-  } catch (err) {
-    return res.status(400).json({ success: false, err });
-  }
-});
+//     return res.status(200).json(storeDate);
+//   } catch (err) {
+//     return res.status(400).json({ success: false, err });
+//   }
+// });
 
 //KNN
-
 // Function to calculate Haversine distance between two points
 function haversineDistance(point1, point2) {
   const [lat1, lon1] = point1;

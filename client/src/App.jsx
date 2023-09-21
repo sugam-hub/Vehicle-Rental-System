@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
@@ -23,16 +23,16 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 import AdminProfile from "./pages/AdminProfile/AdminProfile";
 
 const App = () => {
+  const [isAdmin, setIsAdmin] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
   console.log(user);
-  const [isAdmin, setIsAdmin] = useState(false);
+  // if (user) {
+  //   setIsAdmin(user.otherInfo.isAdmin);
+  // }
 
-  // setIsAdmin(user.otherInfo.isAdmin);
-
+  console.log(isAdmin);
   return (
     <>
-      {/* <Header /> */}
-
       {isAdmin ? (
         <Router>
           <Routes>

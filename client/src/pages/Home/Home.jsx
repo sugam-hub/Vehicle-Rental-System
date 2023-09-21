@@ -3,8 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
 import { getAllCars } from "../../redux/actions/carsAction";
 import { getAllSearch } from "../../redux/actions/searchAction";
+// import "./home.css";
 
-import { Row, Col, Divider, DatePicker, Checkbox, Input } from "antd";
+import {
+  Row,
+  Col,
+  Divider,
+  DatePicker,
+  Checkbox,
+  Input,
+  Pagination,
+} from "antd";
 import { Link } from "react-router-dom";
 import Spinner from "../../components/Spinner/Spinner";
 import moment from "moment";
@@ -13,9 +22,14 @@ const { RangePicker } = DatePicker;
 
 const Home = () => {
   const { cars } = useSelector((state) => state.vehiclesReducer);
+  const { nearestVehicles } = useSelector(
+    (state) => state.nearestVehiclesReducer
+  );
+
   const { loading } = useSelector((state) => state.alertsReducer);
   const { search } = useSelector((state) => state.searchReducer);
   const [totalCars, setTotalCars] = useState([]);
+  const [totalNearestVehicles, setTotalNearestVehicles] = useState([]);
   const dispatch = useDispatch();
   const [searchInput, setSearchInput] = useState("");
   const { Search } = Input;
@@ -25,8 +39,17 @@ const Home = () => {
 
   const latitude = user.otherInfo.lat;
   const longitude = user.otherInfo.lon;
-  console.log(latitude);
-  console.log(longitude);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8; // Number of items to show per page
+
+  const indexOfLastCar = currentPage * itemsPerPage;
+  const indexOfFirstCar = indexOfLastCar - itemsPerPage;
+  const currentCars = totalCars.slice(indexOfFirstCar, indexOfLastCar);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
     dispatch(getAllCars());
@@ -39,6 +62,10 @@ const Home = () => {
   useEffect(() => {
     setTotalCars(cars);
   }, [cars]);
+
+  useEffect(() => {
+    setTotalNearestVehicles(nearestVehicles);
+  }, [nearestVehicles]);
 
   // Filtering on the basic of availability
   const setFilter = (values) => {
@@ -66,17 +93,6 @@ const Home = () => {
     }
     setTotalCars(temp);
   };
-
-  // const handleSearch = async (e) => {
-  //   try {
-  //     const result = await dispatch(getAllSearch(searchInput));
-  //     setResult(result);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
-  console.log(result);
 
   return (
     // gutter is used for margin
@@ -111,7 +127,50 @@ const Home = () => {
 
       {loading == true && <Spinner />}
       <Row justify="center" gutter={16}>
-        {totalCars
+        {currentCars
+          .filter((o) => o.user !== user.otherInfo._id)
+          .map((car) => {
+            const { name, price, image, _id } = car;
+            return (
+              <Col key={_id} lg={5} sm={24} xs={24}>
+                <div className="car p-2 bs1">
+                  <img src={image} className="carimg" />
+
+                  <div className="car-content d-flex align-items-center justify-content-between">
+                    <div className="text-left pl-2">
+                      <p>{name}</p>
+                      <p>Rent Per Hour {price} /-</p>
+                    </div>
+                    <div>
+                      <button className="btn1">
+                        <Link
+                          to={`/booking/${_id}`}
+                          style={{ textDecoration: "none" }}
+                        >
+                          Book Now
+                        </Link>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+            );
+          })}
+      </Row>
+      <Pagination
+        current={currentPage}
+        total={totalCars.length}
+        pageSize={itemsPerPage}
+        onChange={handlePageChange}
+        style={{ marginTop: "20px", textAlign: "center" }}
+      />
+
+      <h5 style={{ fontWeight: "bold", marginLeft: "10px" }}>
+        Vehicles Near You
+      </h5>
+      {loading == true && <Spinner />}
+      <Row justify="center" gutter={16}>
+        {totalNearestVehicles
           .filter((o) => o.user !== user.otherInfo._id)
           .map((car) => {
             const { name, price, image, _id } = car;

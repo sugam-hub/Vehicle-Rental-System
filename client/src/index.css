@@ -5,12 +5,13 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif !important;
-
 }
 
 body{
     font-family: 'Montserrat', sans-serif !important;
     background-color: azure;
+    overflow-x: hidden;
+  overflow-y: auto;
     /* overflow: hidden; */
 }
 
