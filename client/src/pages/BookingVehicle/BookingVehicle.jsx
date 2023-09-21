@@ -8,6 +8,8 @@ import { Row, Col, Divider, DatePicker, Checkbox, Modal } from "antd";
 import moment from "moment";
 import { bookCar } from "../../redux/actions/bookingActions";
 
+import StripeCheckout from "react-stripe-checkout";
+
 const { RangePicker } = DatePicker;
 
 const BookingVehicle = ({ match }) => {
@@ -23,10 +25,92 @@ const BookingVehicle = ({ match }) => {
   const [driver, setDriver] = useState(false);
   const [totalAmount, setTotalAmount] = useState(0);
   const [showModal, setShowModal] = useState(false);
-  const [disableFrom, setDisableFrom] = useState([]);
-  const [disableTo, setDisableTo] = useState([]);
 
-  const [disabledDateRanges, setDisabledDateRanges] = useState([]);
+  const isTimeSlotBooked = (timeSlot) => {
+    if (car.bookedTimeSlots && car.bookedTimeSlots.length > 0) {
+      for (const bookedSlot of car.bookedTimeSlots) {
+        const bookedFrom = moment(bookedSlot.from, "MMM DD YYYY HH:mm");
+        const bookedTo = moment(bookedSlot.to, "MMM DD YYYY HH:mm");
+
+        // Check if there is an overlap between the selected timeSlot and the bookedSlot
+        if (
+          timeSlot.isBetween(bookedFrom, bookedTo) ||
+          timeSlot.isSame(bookedFrom) ||
+          timeSlot.isSame(bookedTo)
+        ) {
+          return true; // Disable the timeSlot if it overlaps with a bookedSlot
+        }
+      }
+    }
+    return false; // Enable the timeSlot if no overlap was found
+  };
+
+  const disabledDate = (current) => {
+    if (!current || !car.bookedTimeSlots || car.bookedTimeSlots.length === 0) {
+      return false; // No bookings or invalid date, enable all dates
+    }
+
+    // Disable dates if any part of the day is booked
+    return car.bookedTimeSlots.some((bookedSlot) => {
+      const bookedFrom = moment(bookedSlot.from, "MMM DD YYYY HH:mm");
+      const bookedTo = moment(bookedSlot.to, "MMM DD YYYY HH:mm");
+
+      // Disable the date if any part of the day is booked
+      return (
+        current.isSame(bookedFrom, "day") ||
+        (current.isSame(bookedTo, "day") && current.isAfter(bookedTo, "day"))
+      );
+    });
+  };
+
+  const disabledTime = (current, type) => {
+    if (!current || !car.bookedTimeSlots || car.bookedTimeSlots.length === 0) {
+      return {}; // No bookings or invalid date, enable all times
+    }
+
+    if (type === "start" || type === "end") {
+      const disabledHours = [];
+      const disabledMinutes = [];
+
+      for (let hour = 0; hour < 24; hour++) {
+        for (let minute = 0; minute < 60; minute += 30) {
+          const timeSlot = current.clone().hour(hour).minute(minute);
+
+          if (isTimeSlotBooked1(timeSlot)) {
+            if (type === "start") {
+              disabledHours.push(hour);
+              disabledMinutes.push(minute);
+            } else if (type === "end") {
+              disabledHours.push(hour);
+              disabledMinutes.push(minute + 30);
+            }
+          }
+        }
+      }
+
+      return {
+        disabledHours: () => disabledHours,
+        disabledMinutes: () => disabledMinutes,
+      };
+    }
+
+    return {};
+  };
+
+  const isTimeSlotBooked1 = (timeSlot) => {
+    if (car.bookedTimeSlots && car.bookedTimeSlots.length > 0) {
+      for (const bookedSlot of car.bookedTimeSlots) {
+        const bookedFrom = moment(bookedSlot.from, "MMM DD YYYY HH:mm");
+        const bookedTo = moment(bookedSlot.to, "MMM DD YYYY HH:mm");
+
+        // Check if there is an overlap between the selected timeSlot and the bookedSlot
+        if (timeSlot.isAfter(bookedFrom) && timeSlot.isBefore(bookedTo)) {
+          return true; // Disable the timeSlot if it overlaps with a bookedSlot
+        }
+      }
+    }
+    return false; // Enable the timeSlot if no overlap was found
+  };
 
   useEffect(() => {
     if (cars.length == 0) {
@@ -48,20 +132,6 @@ const BookingVehicle = ({ match }) => {
     setTotalHours(to.diff(from, "hours"));
   };
 
-  useEffect(() => {
-    if (car.bookedTimeSlots) {
-      const formattedBookedTimeSlots = car.bookedTimeSlots.map((slot) =>
-        moment(slot, "YYYY-MM-DD HH:mm")
-      );
-      setDisableFrom(
-        formattedBookedTimeSlots.map((date) => moment(date._i.from))
-      );
-      setDisableTo(formattedBookedTimeSlots.map((slot) => slot._i.to));
-      setDisabledDateRanges([disableFrom, disableTo]);
-      console.log(disabledDateRanges);
-    }
-  }, [car.bookedTimeSlots]);
-
   const bookNow = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const userId = user.otherInfo._id;
@@ -79,10 +149,22 @@ const BookingVehicle = ({ match }) => {
     dispatch(bookCar(reqObj));
   };
 
-  const disabledDate = (current) => {
-    return disableFrom.some(
-      (fromDate, index) => current >= fromDate && current <= disableTo[index]
-    );
+  const onToken = (token) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user.otherInfo._id;
+    const reqObj = {
+      token,
+      user: userId,
+      car: car._id,
+      totalHours,
+      totalAmount,
+      driverRequired: driver,
+      bookedTimeSlots: {
+        from,
+        to,
+      },
+    };
+    dispatch(bookCar(reqObj));
   };
 
   return (
@@ -129,6 +211,7 @@ const BookingVehicle = ({ match }) => {
               format="MMM DD YYYY HH:mm"
               onChange={selectTimeSlots}
               disabledDate={disabledDate}
+              disabledTime={disabledTime}
             />
             <button
               className="bookBtn mt-2"
@@ -160,9 +243,17 @@ const BookingVehicle = ({ match }) => {
                   </Checkbox>
                   <h3>Total Amount = {totalAmount}</h3>
                 </div>
-                <button className="bookBtn" onClick={bookNow}>
-                  Book Now
-                </button>
+
+                <StripeCheckout
+                  shippingAddress
+                  token={onToken}
+                  amount={totalAmount * 100}
+                  currency="npr"
+                  stripeKey="pk_test_51LeyE8HhWz2IA4nkPPcDp3w6IyY1dKZG4VYmJauWx5C66iPe30Zy1x5MZS7wsNUpyTuLrz0FQf6AM5k6wq87oWCE00L2NQAfRO"
+                  onClick={bookNow}
+                >
+                  <button className="bookBtn">Book Now</button>
+                </StripeCheckout>
               </>
             )}
           </div>

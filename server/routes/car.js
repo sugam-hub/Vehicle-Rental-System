@@ -8,6 +8,10 @@ const {
 const multer = require("multer");
 const Booking = require("../models/Booking");
 const BookingStatus = require("../models/BookingStatus");
+const stripe = require("stripe")(
+  "sk_test_51LeyE8HhWz2IA4nkl4hKopm3vuAdh1LCWweiZvrN2kFpkSeJr7HFCzEXnwkiwG0qZXICfGXApTbIkhuXP7gBtoju00w03Sgnsp"
+);
+const { v4: uuidv4 } = require("uuid");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -96,14 +100,36 @@ router.get("/getallcars", async (req, res) => {
 
 //Book Car
 router.post("/bookcar", async (req, res) => {
-  req.body.transactionId = "1234";
+  const { token } = req.body;
   try {
-    const newBooking = new Booking(req.body);
-    await newBooking.save();
-    const car = await Car.findOne({ _id: req.body.car });
-    car.bookedTimeSlots.push(req.body.bookedTimeSlots);
-    await car.save();
-    return res.status(200).json("Your booking has been placed successfully");
+    const customer = await stripe.customers.create({
+      email: token.email,
+      source: token.id,
+    });
+
+    const payment = await stripe.charges.create(
+      {
+        amount: req.body.totalAmount * 100,
+        currency: "npr",
+        customer: customer.id,
+        receipt_email: token.email,
+      },
+      {
+        idempotencyKey: uuidv4(),
+      }
+    );
+
+    if (payment) {
+      req.body.transactionId = payment.source.id;
+      const newBooking = new Booking(req.body);
+      await newBooking.save();
+      const car = await Car.findOne({ _id: req.body.car });
+      car.bookedTimeSlots.push(req.body.bookedTimeSlots);
+      await car.save();
+      return res.status(200).json("Your booking has been placed successfully");
+    } else {
+      return res.status(400).json(err);
+    }
   } catch (err) {
     return res.status(400).json(err);
   }
