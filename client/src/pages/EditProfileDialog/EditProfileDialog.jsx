@@ -15,6 +15,8 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const EditProfileDialog = ({ open, handleClose, user, onSubmit }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [editName, setEditName] = useState("");
   const [editPhone, setEditPhone] = useState("");
   const [editAddress, setEditAddress] = useState("");
@@ -25,8 +27,13 @@ const EditProfileDialog = ({ open, handleClose, user, onSubmit }) => {
     event.preventDefault();
   };
 
-  const handleClickShowPassword = () =>
-    setShowPassword((show) => !showPassword);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleClickShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const handleSubmit = () => {
     const reqObj = {
@@ -78,28 +85,28 @@ const EditProfileDialog = ({ open, handleClose, user, onSubmit }) => {
                 onMouseDown={handleMouseDownPassword}
                 edge="end"
               >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
+                {showPassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
           }
         />
 
-        <InputLabel htmlFor="outlined-adornment-password">
+        <InputLabel htmlFor="outlined-adornment-confirmPassword">
           Confirm Password
         </InputLabel>
         <FilledInput
           id="filled-adornment-confirmPassword"
           onChange={(e) => setEditConfirmPassword(e.target.value)}
-          type={showPassword ? "text" : "password"}
+          type={showConfirmPassword ? "text" : "password"}
           endAdornment={
             <InputAdornment position="end">
               <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
+                aria-label="toggle confirmPassword visibility"
+                onClick={handleClickShowConfirmPassword}
                 onMouseDown={handleMouseDownPassword}
                 edge="end"
               >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
+                {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
           }

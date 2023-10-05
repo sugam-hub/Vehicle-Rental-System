@@ -42,6 +42,46 @@ export const userRegister = (reqObj) => async (dispatch) => {
   }
 };
 
+//Forgot password
+export const forgotPassword = (reqObj) => async (dispatch) => {
+  dispatch({ type: "LOADING", payload: true });
+
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/auth/forgot-password",
+      reqObj
+    );
+    console.log(response.data);
+    message.success("Password rest link sent please check your mail");
+    dispatch({ type: "LOADING", payload: false });
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 500);
+  } catch (err) {
+    message.error("Error sending password rest link");
+    dispatch({ type: "LOADING", payload: false });
+  }
+};
+
+//Reset Password
+export const resetPassword = (reqObj) => async (dispatch) => {
+  dispatch({ type: "LOADING", payload: true });
+
+  try {
+    await axios.post(
+      `http://localhost:5000/api/auth/reset-password/${reqObj.userid}`,
+      reqObj
+    );
+    message.success("Password successfully updated...");
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 500);
+    dispatch({ type: "LOADING", payload: false });
+  } catch (err) {
+    dispatch({ type: "LOADING", payload: false });
+  }
+};
+
 //GET ALL USERS
 export const getAllUsers = () => async (dispatch) => {
   dispatch({ type: "LOADING", payload: true });

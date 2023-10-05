@@ -16,6 +16,10 @@ const Users = () => {
   const { loading } = useSelector((state) => state.alertsReducer);
   const [selectedUserId, setSelectedUserId] = useState(null);
 
+  // Get the logged-in user's ID from localStorage
+  const loggedInUserId = JSON.parse(localStorage.getItem("user"));
+  console.log(loggedInUserId);
+
   useEffect(() => {
     try {
       if (users.length === 0) {
@@ -30,6 +34,11 @@ const Users = () => {
     setSelectedUserId(userId);
   };
 
+  // Filter out the logged-in user from the users list
+  const filteredUsers = users.filter(
+    (user) => user._id !== loggedInUserId.otherInfo._id
+  );
+
   return (
     <>
       <AdminHeader />
@@ -37,7 +46,7 @@ const Users = () => {
       <h3 className="text-center mt-2">Users</h3>
       <Row justify="center" gutter={16}>
         <Col lg={20} sm={24}>
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <UserItem
               key={user._id}
               user={user}

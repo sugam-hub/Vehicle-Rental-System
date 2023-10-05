@@ -30,7 +30,9 @@ const UserBookings = () => {
         <Row justify="center" gutter={16}>
           <Col lg={20} sm={24}>
             {bookings
-              .filter((o) => o.user._id == user.otherInfo._id)
+              .filter(
+                (o) => o.user && user && o.user._id === user.otherInfo._id
+              )
               .map((booking) => {
                 return (
                   <Row gutter={16} className="bs1 mt-3 text-left">
@@ -67,6 +69,9 @@ const UserBookings = () => {
                       <p>
                         Date of booking:{" "}
                         <b>{moment(booking.createdAt).format("MMM DD yyyy")}</b>
+                      </p>
+                      <p>
+                        Transaction Id: <b>{booking.transactionId}</b>
                       </p>
                       <Popconfirm
                         title="Delete the task"

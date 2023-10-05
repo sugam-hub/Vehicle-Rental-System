@@ -2,6 +2,7 @@ const router = require("express").Router();
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const CryptoJS = require("crypto-js");
+const nodemailer = require("nodemailer");
 
 // REGISTER
 router.post("/register", async (req, res) => {
@@ -268,6 +269,80 @@ router.put("/edituser/:userid", async (req, res) => {
     return res.status(200).send(updatedUser);
   } catch (err) {
     return res.status(500).json(err);
+  }
+});
+
+router.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+  try {
+    await User.findOne({ email: email }).then((user) => {
+      if (!user) {
+        return res.status(400).json("User not found");
+      }
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SEC, {
+        expiresIn: "1d",
+      });
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.MYEMAIL,
+          pass: process.env.MYPASSWORD,
+        },
+      });
+
+      var mailOptions = {
+        from: process.env.MYEMAIL,
+        to: email,
+        subject: "Reset your password",
+        text: `http://localhost:5173/reset-password/${user._id}`,
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          return res.status(200).json("Message sent successfully");
+        }
+      });
+    });
+  } catch (err) {
+    return res.status(400).json(err);
+  }
+});
+
+router.post("/reset-password/:id", async (req, res) => {
+  const { id } = req.params;
+  const { password } = req.body;
+
+  function checkPasswordValidation(value) {
+    let regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (regex.test(value)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  const validPassword = checkPasswordValidation(password);
+
+  try {
+    if (!validPassword) {
+      return res.status(400).json("Please enter strong password");
+    } else {
+      const encryptedPassword = CryptoJS.AES.encrypt(
+        password,
+        process.env.PASS_SEC
+      ).toString();
+
+      await User.findByIdAndUpdate(
+        { _id: id },
+        { password: encryptedPassword }
+      );
+      return res.status(200).json("Success");
+    }
+  } catch (err) {
+    return res.status(400).json(err);
   }
 });
 

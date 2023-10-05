@@ -21,14 +21,13 @@ import Notification from "./pages/Notification/Notification";
 import Users from "./pages/Users/Users";
 import UserProfile from "./pages/UserProfile/UserProfile";
 import AdminProfile from "./pages/AdminProfile/AdminProfile";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
 
 const App = () => {
-  const [isAdmin, setIsAdmin] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
-  // if (user) {
-  //   setIsAdmin(user.otherInfo.isAdmin);
-  // }
+
+  const isAdmin = user && user.otherInfo.isAdmin;
 
   console.log(isAdmin);
   return (
@@ -56,6 +55,12 @@ const App = () => {
             />
             <Route path="/login" exact element={<Login />} />
             <Route path="/register" exact element={<Register />} />
+            <Route path="/forgot-password" exact element={<ForgotPassword />} />
+            <Route
+              path="/reset-password/:id/"
+              exact
+              element={<ResetPassword />}
+            />
             <Route
               path="booking/*"
               element={<ProtectedRoute></ProtectedRoute>}
