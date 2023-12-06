@@ -35,6 +35,17 @@ const AddCar = () => {
   const lon = Number(selectPosition?.lon);
   console.log("lat:" + lat, "lon:" + lon);
 
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files && e.target.files[0];
+  //   if (file) {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       image: file,
+  //     }));
+  //   }
+  // };
+  
+
   const onFinish = (values) => {
     values.bookedTimeSlots = [];
     values.location = {
@@ -176,14 +187,9 @@ const AddCar = () => {
               <button className="loginBtn">ADD CAR</button>
             </div>
           </Form>
-
           <hr />
-
-          <div>{/* <Address /> */}</div>
-          {/* </Form> */}
         </Col>
       </Row>
-      {/* <Address /> */}
     </>
   );
 };

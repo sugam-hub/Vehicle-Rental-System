@@ -1,6 +1,8 @@
+// UserProfile.jsx
+
 import React, { useEffect, useState } from "react";
 import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
-import "./userprofile.css";
+import "./userprofile.css"; // Import the CSS file
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -66,19 +68,21 @@ const UserProfile = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <>
       <DefaultLayout />
-      <div className="container" style={{marginTop: "5rem"}}>
+      <div className="container">
         <div className="box">
           <img
             src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png"
+            alt="Profile"
             height="200px"
           />
-          <h3 style={{ color: "black" }}>{name}</h3>
-          <h5 style={{ color: "black" }}>{address}</h5>
-          <h5 style={{ color: "black" }}>{phone}</h5>
-          <div>
+          <h3>{name}</h3>
+          <h5>{address}</h5>
+          <h5>{phone}</h5>
+          <div className="button-container">
             <Button variant="outlined" onClick={handleClickOpen}>
               Edit Profile
             </Button>

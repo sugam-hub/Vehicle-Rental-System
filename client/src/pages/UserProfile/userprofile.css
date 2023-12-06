@@ -1,22 +1,37 @@
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-  }
-  
-  .box {
-    flex-direction: column;
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
-    width: 400px;
-    height: 500px;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    font-weight: bold;
-    margin: 20px;
+/* userprofile.css */
 
-  }
-  
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 85vh;
+}
+
+.box {
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  max-width: 400px;
+  width: 100%;
+}
+
+.box img {
+  border-radius: 50%;
+}
+
+.box h3,
+.box h5 {
+  margin: 10px 0;
+  color: #333;
+}
+
+.button-container {
+  margin-top: 10px;
+}
+
+.button-container button {
+  margin-right: 10px;
+}

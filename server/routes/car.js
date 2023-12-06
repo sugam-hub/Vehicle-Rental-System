@@ -13,16 +13,18 @@ const stripe = require("stripe")(
 );
 const { v4: uuidv4 } = require("uuid");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "./uploads/");
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//     cb(null, file.fieldname + "-" + uniqueSuffix + ".jpg");
+//   },
+// });
 
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
+
 
 //ADD NEW CAR
 router.post("/addcar", async (req, res) => {

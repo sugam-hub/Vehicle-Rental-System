@@ -47,9 +47,14 @@ const EditProfileDialog = ({ open, handleClose, user, onSubmit }) => {
     onSubmit(reqObj);
   };
 
+  const handleCancel = () => {
+    handleClose(); // Close the dialog on Cancel
+  };
+
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>EDIT PROFILE</DialogTitle>
+      <DialogContent>
       <DialogContent>
         <InputLabel htmlFor="name">Name</InputLabel>
         <FilledInput
@@ -112,8 +117,9 @@ const EditProfileDialog = ({ open, handleClose, user, onSubmit }) => {
           }
         />
       </DialogContent>
+      </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleCancel}>Cancel</Button>
         <Button onClick={handleSubmit}>Confirm</Button>
       </DialogActions>
     </Dialog>
