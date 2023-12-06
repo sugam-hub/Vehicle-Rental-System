@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col, Form, Input } from "antd";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -7,11 +7,17 @@ import { userLogin } from "../../redux/actions/userActions";
 import Password from "antd/es/input/Password";
 
 const Login = () => {
+
+  const [showHidePassword, setShowHidePassword] = useState(false)
   const dispatch = useDispatch();
   const onFinish = (values) => {
     dispatch(userLogin(values));
     console.log(values);
   };
+
+  const handlePassword = () => {
+    setShowHidePassword(!showHidePassword)
+  }
   return (
     <div className="login">
       <Row gutter={16} className="d-flex align-items-center">
@@ -39,7 +45,10 @@ const Login = () => {
               label="Password"
               rules={[{ required: true }]}
             >
-              <Input />
+              <div style={{display: "flex", height: "30px", alignItems: "center", justifyContent: "center"}}>
+              <Input type={showHidePassword ? "text" : "password"} />
+              <p style={{border: '1px solid orangered', width: "50px",height: "30px", padding: "5px", color: "orangered", borderRadius: "5px", backgroundColor: "white", cursor: "pointer"}} onClick={handlePassword}>{showHidePassword ? "Hide" : "Show"}</p>
+              </div>
             </Form.Item>
             <button className="loginBtn">Login</button>
 

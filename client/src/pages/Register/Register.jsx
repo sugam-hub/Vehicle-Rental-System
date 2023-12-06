@@ -23,6 +23,17 @@ const Register = () => {
   const [lat, setLat] = useState("");
   const [lon, setLon] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  const handlePassword = () => {
+    setShowPassword(!showPassword)
+  }
+
+  const handleConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword)
+  }
+
   const handleListItemClick = (item) => {
     setSelectPosition(item);
     setSearchText(item.display_name);
@@ -68,18 +79,30 @@ const Register = () => {
             <Form.Item name="email" label="Email" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
-            <label>Address </label>
-            <br></br>
-            <br></br>
+            <Form.Item
+              name="phone"
+              label="Phone number"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <div style={{display: "flex", alignItems: "center"}}>
+              <p style={{color: "#ff4d4f", marginLeft: '-5px', marginRight: '3px'}}>*</p>
+              <label style={{marginLeft: "-3px"}}>Address</label>
+            </div>
+            
+            <div style={{display: "flex", height: "30px", alignItems: "center", justifyContent: "center", marginTop: "10px"}}>
             <input
               value={searchText}
+              style={{width: "95%", height: "32px", padding: "4px 11px", borderRadius: "7px", marginLeft: ""}}
               onChange={(event) => {
                 setSearchText(event.target.value);
               }}
             />
 
-            <button
-              className="loginBtn"
+            <p
+              // className="loginBtn"
+              style={{border: '1px solid orangered', width: "60px",height: "30px", padding: "5px", color: "orangered", borderRadius: "5px", backgroundColor: "white", cursor: "pointer"}}
               onClick={(e) => {
                 e.preventDefault();
                 const params = {
@@ -105,7 +128,8 @@ const Register = () => {
               }}
             >
               Search
-            </button>
+            </p>
+            </div>
             <List component="nav" aria-label="main mailbox folders">
               {listPlace.map((item) => {
                 return (
@@ -126,26 +150,26 @@ const Register = () => {
               })}
             </List>
 
-            <Form.Item
-              name="phone"
-              label="Phone number"
-              rules={[{ required: true }]}
-            >
-              <Input />
-            </Form.Item>
+           
             <Form.Item
               name="password"
               label="Password"
               rules={[{ required: true }]}
             >
-              <Input />
+              <div style={{display: "flex", height: "30px", alignItems: "center", justifyContent: "center"}}>
+              <Input type={showPassword ? "text" : "password"} />
+              <p style={{border: '1px solid orangered', width: "50px",height: "30px", padding: "5px", color: "orangered", borderRadius: "5px", backgroundColor: "white", cursor: "pointer"}} onClick={handlePassword}>{showPassword ? "Hide" : "Show"}</p>
+              </div>
             </Form.Item>
             <Form.Item
               name="confirmPassword"
               label="Confirm Password"
               rules={[{ required: true }]}
             >
-              <Input />
+              <div style={{display: "flex", height: "30px", alignItems: "center", justifyContent: "center"}}>
+              <Input type={showConfirmPassword ? "text" : "password"} />
+              <p style={{border: '1px solid orangered', width: "50px",height: "30px", padding: "5px", color: "orangered", borderRadius: "5px", backgroundColor: "white", cursor: "pointer"}} onClick={handleConfirmPassword}>{showConfirmPassword ? "Hide" : "Show"}</p>
+              </div>
             </Form.Item>
 
             <button className="loginBtn">Register</button>
