@@ -1,0 +1,29 @@
+.car-img {
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .car-content {
+    margin-top: 12px;
+  }
+  
+  .actions {
+    margin-top: 12px;
+  }
+  
+  .edit-icon,
+  .delete-icon {
+    font-size: 18px;
+    margin-right: 8px;
+    cursor: pointer;
+  }
+  
+  .delete-icon {
+    color: red;
+  }
+  
+  .edit-icon:hover,
+  .delete-icon:hover {
+    color: #1890ff;
+  }
+  

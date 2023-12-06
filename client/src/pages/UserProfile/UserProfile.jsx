@@ -69,7 +69,7 @@ const UserProfile = () => {
   return (
     <>
       <DefaultLayout />
-      <div className="container">
+      <div className="container" style={{marginTop: "5rem"}}>
         <div className="box">
           <img
             src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png"

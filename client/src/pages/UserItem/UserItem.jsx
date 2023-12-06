@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Col, Row, Popconfirm } from "antd";
 import { Button } from "@mui/material";
 import EditProfileDialog from "../EditProfileDialog/EditProfileDialog";
+// import "./popUp.css"
 
 const UserItem = ({
   user,
@@ -22,7 +23,7 @@ const UserItem = ({
   console.log(open);
 
   return (
-    <Row gutter={16} className="bs1 mt-3 text-left">
+    <Row gutter={16} className="bs1 mt-4 text-left">
       <Col lg={6} sm={24}>
         <p style={{ fontSize: "18px" }}>
           <b>{user.name}</b>
@@ -48,7 +49,7 @@ const UserItem = ({
         >
           <button className="loginBtn">Delete User</button>
         </Popconfirm>
-        <Button variant="outlined" onClick={handleEdit}>
+        <Button variant="outlined" onClick={handleEdit} className="loginBtn">
           Edit Profile
         </Button>
         <EditProfileDialog

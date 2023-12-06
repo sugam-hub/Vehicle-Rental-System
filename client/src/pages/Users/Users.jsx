@@ -43,7 +43,7 @@ const Users = () => {
     <>
       <AdminHeader />
       {loading && <Spinner />}
-      <h3 className="text-center mt-2">Users</h3>
+      <h3 className="text-center" style={{marginTop: "3rem"}}>Users</h3>
       <Row justify="center" gutter={16}>
         <Col lg={20} sm={24}>
           {filteredUsers.map((user) => (

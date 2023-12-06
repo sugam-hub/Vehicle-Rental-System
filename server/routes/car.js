@@ -288,11 +288,20 @@ router.post("/nearestvehicles", async (req, res) => {
     // Use the kNN algorithm to find the nearest vehicles
     const nearestCars = kNearestNeighbors(allCars, [latitude, longitude], k);
 
-    const otherInfo = nearestCars.map((car) => {
-      const { bookedTimeSlots, ...rest } = car._doc; // Extract all car data except bookedTimeSlots
-      return rest;
-    });
-    return res.status(200).json(otherInfo);
+   // Extract necessary information and include distance in each car object
+   const sortedNearestCars = nearestCars.map((car) => {
+    const { bookedTimeSlots, ...rest } = car._doc;
+    return { ...rest, distance: car.distance };
+  });
+
+  // Sort the cars by distance
+  const sortedCars =  sortedNearestCars.sort((a, b) => a.distance - b.distance);
+  console.log("Sorted cars: ",sortedCars)
+
+
+  // console.log(sortedNearestCars.map((car) => ({ id: car._id, distance: car.distance })));
+
+    return res.status(200).json(sortedCars);
   } catch (err) {
     return res.status(400).json({ success: false, err });
   }

@@ -26,8 +26,8 @@ const UserBookings = () => {
       <div>
         <DefaultLayout />
         {loading && <Spinner />}
-        <h3 className="text-center mt-2">My Bookings</h3>
-        <Row justify="center" gutter={16}>
+        <h3 className="text-center" style={{marginTop: "6rem"}}>My Bookings</h3>
+        <Row justify="center" gutter={16} style={{marginTop: "1rem"}}>
           <Col lg={20} sm={24}>
             {bookings
               .filter(

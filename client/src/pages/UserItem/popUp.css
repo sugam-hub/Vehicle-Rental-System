@@ -1,0 +1,42 @@
+/* Add your custom styles for the Popconfirm */
+
+.custom-popconfirm {
+    width: 250px;
+    padding: 16px;
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+  
+  .custom-popconfirm-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #ff4d4f; /* Red color for the title */
+  }
+  
+  .custom-popconfirm-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+  
+  .custom-popconfirm-buttons button {
+    margin-left: 8px;
+    color: #fff;
+    background-color: #ff4d4f; /* Red color for the button */
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .custom-popconfirm-buttons button.cancel-btn {
+    background-color: #f0f0f0; /* Light gray color for the Cancel button */
+    color: #333;
+  }
+  
+  .custom-popconfirm-buttons button:hover {
+    opacity: 0.8;
+  }
+  

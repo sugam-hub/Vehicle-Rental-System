@@ -63,10 +63,10 @@ const Notification = () => {
       <div>
         <DefaultLayout />
         {/* {loading && <Spinner />} */}
-        <h3 className="text-center mt-2">Notifications</h3>
+        <h3 className="text-center" style={{marginTop: "6rem"}}>Notifications</h3>
 
         {user ? (
-          <Row justify="center" gutter={16}>
+          <Row justify="center" gutter={16} >
             <Col lg={20} sm={24}>
               {bookings
                 .filter((o) => o.car.user == userId)

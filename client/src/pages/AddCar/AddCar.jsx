@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCar } from "../../redux/actions/carsAction";
 import Spinner from "../../components/Spinner/Spinner";
 import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import AdminHeader from "../../components/AdminHeader/AdminHeader";
 
 const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
 
@@ -25,7 +26,10 @@ const AddCar = () => {
   const [selectPosition, setSelectPosition] = useState("");
 
   const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user);
   const userId = user.otherInfo._id;
+  const isAdmin = user.otherInfo.isAdmin;
+  console.log(isAdmin)
 
   const lat = Number(selectPosition?.lat);
   const lon = Number(selectPosition?.lon);
@@ -44,10 +48,13 @@ const AddCar = () => {
 
   return (
     <>
+    {
+      isAdmin ? <AdminHeader /> :
       <DefaultLayout />
+    }
       {loading && <Spinner />}
 
-      <Row justify="center mt-4">
+      <Row justify="center " style={{marginTop: "7rem"}}>
         <Col lg={12} sm={24}>
           <Form className="bs1 p-2" layout="vertical" onFinish={onFinish}>
             <h3>Add New Car</h3>

@@ -11,8 +11,43 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { NotificationsNone } from "@mui/icons-material/";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { Link } from "react-router-dom";
+
+const primaryColor = "#2196F3";
+const secondaryColor = "#FF4081";
+const textColor = "#FFFFFF";
+
+const titleStyle = {
+  flexGrow: 1,
+  fontFamily: "Roboto, sans-serif",
+  fontWeight: 700,
+  letterSpacing: ".3rem",
+  color: textColor,
+  textDecoration: "none",
+};
+
+const buttonStyle = {
+  fontFamily: "Roboto, sans-serif",
+  fontWeight: 500,
+  color: textColor,
+  display: "block",
+  marginY: 2,
+  marginRight: "10px", // Add space between menu items
+};
+
+const toolbarStyle = {
+  padding: "0 16px",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+};
+
+const buttonHoverStyle = {
+  "&:hover": {
+    backgroundColor: secondaryColor,
+  },
+};
 
 const DefaultLayout = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -21,6 +56,7 @@ const DefaultLayout = () => {
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -34,24 +70,10 @@ const DefaultLayout = () => {
   };
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" sx={{ backgroundColor: primaryColor }}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
+        <Toolbar disableGutters sx={toolbarStyle}>
+          <Typography variant="h6" noWrap component="a" href="/" sx={titleStyle}>
             RENT A VEHICLE
           </Typography>
 
@@ -87,7 +109,7 @@ const DefaultLayout = () => {
               <MenuItem onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">
                   <Link
-                    style={{ textDecoration: "none", color: "white" }}
+                    style={{ textDecoration: "none", color: textColor }}
                     to="/"
                   >
                     Home
@@ -113,7 +135,7 @@ const DefaultLayout = () => {
               onClick={() => {
                 window.location.href = "/";
               }}
-              sx={{ my: 2, color: "white", display: "block" }}
+              sx={{ ...buttonStyle, ...buttonHoverStyle }}
             >
               Home
             </Button>
@@ -121,7 +143,7 @@ const DefaultLayout = () => {
               onClick={() => {
                 window.location.href = "/booking/userbookings";
               }}
-              sx={{ my: 2, color: "white", display: "block" }}
+              sx={{ ...buttonStyle, ...buttonHoverStyle }}
             >
               Bookings
             </Button>
@@ -129,17 +151,17 @@ const DefaultLayout = () => {
               onClick={() => {
                 window.location.href = "/admin";
               }}
-              sx={{ my: 2, color: "white", display: "block" }}
+              sx={{ ...buttonStyle, ...buttonHoverStyle }}
             >
               Add Car
             </Button>
           </Box>
 
           <Link to="/notification" style={{ textDecoration: "none" }}>
-            <NotificationsNone
+            <NotificationsNoneIcon
               style={{
                 color: "orangered",
-                marginLeft: "700px",
+                marginLeft: "16px",
                 marginTop: "6px",
               }}
             />
@@ -195,4 +217,5 @@ const DefaultLayout = () => {
     </AppBar>
   );
 };
+
 export default DefaultLayout;

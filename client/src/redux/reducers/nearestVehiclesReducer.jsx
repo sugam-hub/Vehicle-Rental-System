@@ -4,7 +4,7 @@ const initialData = {
 
 export const nearestVehiclesReducer = (state = initialData, action) => {
   switch (action.type) {
-    case "GET_ALL_CARS": {
+    case "GET_NEAREST_VEHICLES": {
       return {
         ...state,
         nearestVehicles: action.payload,

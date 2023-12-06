@@ -174,7 +174,7 @@ const BookingVehicle = ({ match }) => {
       <Row
         justify="center"
         className="d-flex align-items-center"
-        style={{ minHeight: "90vh" }}
+        style={{ minHeight: "80vh", marginTop: "7rem" }}
       >
         <Col lg={12} sm={24} xs={24}>
           <img src={car.image} className="carimg2 bs1" />

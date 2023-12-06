@@ -30,10 +30,12 @@ const AdminHome = () => {
   return (
     // gutter is used for margin
     <>
-      <DefaultLayout />
+      <DefaultLayout  />
+      {/* <h2>asdsad</h2> */}
 
-      <Row justify="center" gutter="16" className="mt-2">
+      <Row justify="center" gutter="16" style={{marginTop: "7rem"}} >
         <Col lg={20} sm={24}>
+          
           <button className="loginBtn">
             <a href="/addcar" style={{ textDecoration: "none" }}>
               ADD CAR
@@ -43,51 +45,51 @@ const AdminHome = () => {
       </Row>
 
       {loading == true && <Spinner />}
-      <Row justify="center" gutter={16}>
-        {totalCars
-          .filter((o) => o.user == user.otherInfo._id)
-          .map((car) => {
-            const { name, price, image, _id } = car;
-            return (
-              <Col key={_id} lg={5} sm={24} xs={24}>
-                <div className="car p-2 bs1">
-                  <img src={image} className="carimg" />
+        <Row justify="center" gutter={16}>
+          {totalCars
+            .filter((o) => o.user == user.otherInfo._id)
+            .map((car) => {
+              const { name, price, image, _id } = car;
+              return (
+                <Col key={_id} lg={5} sm={24} xs={24}>
+                  <div className="car p-2 bs1">
+                    <img src={image} className="carimg" />
 
-                  <div className="car-content d-flex align-items-center justify-content-between">
-                    <div className="text-left pl-2">
-                      <p>{name}</p>
-                      <p>Rent Per Hour {price} /-</p>
-                    </div>
-                    <div className="mr-4">
-                      <Link to={`/editcar/${car._id}`}>
-                        <EditOutlined
-                          style={{
-                            marginRight: "15px",
-                            color: "green",
-                            cursor: "pointer",
+                    <div className="car-content d-flex align-items-center justify-content-between">
+                      <div className="text-left pl-2">
+                        <p>{name}</p>
+                        <p>Rent Per Hour {price} /-</p>
+                      </div>
+                      <div className="mr-4">
+                        <Link to={`/editcar/${car._id}`}>
+                          <EditOutlined
+                            style={{
+                              marginRight: "15px",
+                              color: "green",
+                              cursor: "pointer",
+                            }}
+                          />
+                        </Link>
+                        <Popconfirm
+                          title="Delete the task"
+                          description="Are you sure to delete this car?"
+                          onConfirm={() => {
+                            dispatch(deleteCar({ carid: car._id }));
                           }}
-                        />
-                      </Link>
-                      <Popconfirm
-                        title="Delete the task"
-                        description="Are you sure to delete this car?"
-                        onConfirm={() => {
-                          dispatch(deleteCar({ carid: car._id }));
-                        }}
-                        okText="Yes"
-                        cancelText="No"
-                      >
-                        <DeleteOutlined
-                          style={{ color: "red", cursor: "pointer" }}
-                        />
-                      </Popconfirm>
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <DeleteOutlined
+                            style={{ color: "red", cursor: "pointer" }}
+                          />
+                        </Popconfirm>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Col>
-            );
-          })}
-      </Row>
+                </Col>
+              );
+            })}
+        </Row>
     </>
   );
 };

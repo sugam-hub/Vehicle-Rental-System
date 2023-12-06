@@ -40,6 +40,7 @@ const App = () => {
             <Route path="/login" exact element={<Login />} />
             <Route path="/register" exact element={<Register />} />
             <Route path="/adminprofile" element={<AdminProfile />} />
+            <Route path="/addcar" element={<AddCar />} />
           </Routes>
         </Router>
       ) : (

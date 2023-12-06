@@ -141,7 +141,7 @@ button{
 
 .carimg{
     height: 180px;
-    width: 250px; /*make this auto*/
+    width:280px; /*make this auto*/
     /* border: 2px solid red; */
     border-radius: 5px;
     transform: translateY(-50px);
@@ -152,8 +152,7 @@ button{
     margin-top: 60px;
     height: 160px;
     transition: 0.3s;
-    /* width: 300px; */
-    
+    width: 300px; 
 }
 
 .car:hover{

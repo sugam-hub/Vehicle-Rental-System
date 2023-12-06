@@ -2,28 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
 import { getAllCars } from "../../redux/actions/carsAction";
-
-import {
-  Row,
-  Col,
-  Divider,
-  DatePicker,
-  Checkbox,
-  Input,
-  Pagination,
-} from "antd";
+import { nearestVehicle } from "../../redux/actions/nearestVehiclesAction";
+import { Row, Col, Divider, DatePicker, Checkbox, Input, Pagination } from "antd";
 import { Link } from "react-router-dom";
 import Spinner from "../../components/Spinner/Spinner";
 import moment from "moment";
-import { nearestVehicle } from "../../redux/actions/nearestVehiclesAction";
 const { RangePicker } = DatePicker;
 
 const Home = () => {
   const { cars } = useSelector((state) => state.vehiclesReducer);
-  const { nearestVehicles } = useSelector(
-    (state) => state.nearestVehiclesReducer
-  );
-
+  const { nearestVehicles } = useSelector((state) => state.nearestVehiclesReducer);
   const { loading } = useSelector((state) => state.alertsReducer);
   const { search } = useSelector((state) => state.searchReducer);
   const dispatch = useDispatch();
@@ -97,31 +85,31 @@ const Home = () => {
   // Handle search button click
   const handleSearchButtonClick = () => {
     const filtered = totalCars.filter((car) =>
-      car.name.toLowerCase().includes(searchInput.toLowerCase())
+      car.name.toLowerCase().includes(searchInput.toLowerCase()) &&
+      car.user !== user.otherInfo._id
     );
 
     setFilteredCars(filtered);
-    setSearchClicked(true); // Set the flag to indicate that the search button was clicked
+    setSearchClicked(true); 
+  };
+
+  const handleSearchClear = () => {
+    setSearchInput(""); 
+    setFilteredCars([]); 
+    setSearchClicked(false); 
   };
 
   return (
-    // gutter is used for margin
     <>
       <DefaultLayout />
-
-      <Row className="mt-3" justify="center">
+      <Row style={{ marginTop: "7rem" }} justify="center">
         <Col lg={20} sm={24} className="d-flex justify-content-left">
           <RangePicker
             showTime={{ format: "HH:mm" }}
             format="MMM DD YYYY HH:mm"
             onChange={setFilter}
           />
-          <Col
-            lg={8}
-            sm={24}
-            className="d-flex"
-            style={{ marginLeft: "200px" }}
-          >
+          <Col lg={8} sm={24} className="d-flex" style={{ marginLeft: "600px" }}>
             <Search
               placeholder="Search for car"
               allowClear
@@ -131,59 +119,70 @@ const Home = () => {
               onChange={(e) => setSearchInput(e.target.value)}
               onClick={() => setSearchClicked(false)} // Reset the flag when the input field is clicked
               onSearch={handleSearchButtonClick}
+              onClear={handleSearchClear} // Handle clear event
             />
           </Col>
         </Col>
       </Row>
 
       {loading && <Spinner />}
-      <Row justify="center" gutter={16}>
-        {searchClicked
-          ? filteredCars.map((car) => {
-              const { name, price, image, _id } = car;
-              return (
-                <Col key={_id} lg={5} sm={24} xs={24}>
-                  <div className="car p-2 bs1">
-                    <img src={image} className="carimg" />
+      
+      {totalCars.length === 0 && !loading && (
+        <Row justify="center">
+          <Col>
+            <p>No cars available.</p>
+          </Col>
+        </Row>
+      )}
 
-                    <div className="car-content d-flex align-items-center justify-content-between">
-                      <div className="text-left pl-2">
-                        <p>{name}</p>
-                        <p>Rent Per Hour {price} /-</p>
+      {totalCars.length > 0 && !loading && (
+        <Row justify="center" gutter={16}>
+          {searchClicked
+            ? (filteredCars.length > 0
+                ? filteredCars.map((car) => (
+                    <Col key={car._id} lg={5} sm={24} xs={24}>
+                      <div className="car p-2 bs1">
+                        <img src={car.image} className="carimg" />
+                        <div className="car-content d-flex align-items-center justify-content-between">
+                          <div className="text-left pl-2">
+                            <p>{car.name}</p>
+                            <p>Rent Per Hour {car.price} /-</p>
+                          </div>
+                          <div>
+                            <button className="btn1">
+                              <Link
+                                to={`/booking/${car._id}`}
+                                style={{ textDecoration: "none" }}
+                              >
+                                Book Now
+                              </Link>
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <button className="btn1">
-                          <Link
-                            to={`/booking/${_id}`}
-                            style={{ textDecoration: "none" }}
-                          >
-                            Book Now
-                          </Link>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </Col>
-              );
-            })
-          : currentCars
-              .filter((o) => o.user !== user.otherInfo._id)
-              .map((car) => {
-                const { name, price, image, _id } = car;
-                return (
-                  <Col key={_id} lg={5} sm={24} xs={24}>
+                    </Col>
+                  ))
+                : (
+                    <Col>
+                      <p>No cars found matching the search criteria.</p>
+                    </Col>
+                  )
+              )
+            : currentCars
+                .filter((o) => o.user !== user.otherInfo._id)
+                .map((car) => (
+                  <Col key={car._id} lg={5} sm={24} xs={24}>
                     <div className="car p-2 bs1">
-                      <img src={image} className="carimg" />
-
+                      <img src={car.image} className="carimg" />
                       <div className="car-content d-flex align-items-center justify-content-between">
                         <div className="text-left pl-2">
-                          <p>{name}</p>
-                          <p>Rent Per Hour {price} /-</p>
+                          <p>{car.name}</p>
+                          <p>Rent Per Hour {car.price} /-</p>
                         </div>
                         <div>
                           <button className="btn1">
                             <Link
-                              to={`/booking/${_id}`}
+                              to={`/booking/${car._id}`}
                               style={{ textDecoration: "none" }}
                             >
                               Book Now
@@ -193,10 +192,11 @@ const Home = () => {
                       </div>
                     </div>
                   </Col>
-                );
-              })}
-      </Row>
-      <Pagination
+                ))}
+        </Row>
+      )}
+
+    <Pagination
         current={currentPage}
         total={searchClicked ? filteredCars.length : totalCars.length}
         pageSize={itemsPerPage}
@@ -205,39 +205,40 @@ const Home = () => {
       />
 
       {loading && <Spinner />}
-      <h5 style={{ fontWeight: "bold", marginLeft: "10px" }}>
-        Vehicles Near You
-      </h5>
-      <Row justify="center" gutter={16}>
-        {totalNearestVehicles
-          .filter((o) => o.user !== user.otherInfo._id)
-          .map((car) => {
-            const { name, price, image, _id } = car;
-            return (
-              <Col key={_id} lg={5} sm={24} xs={24}>
-                <div className="car p-2 bs1">
-                  <img src={image} className="carimg" />
-                  <div className="car-content d-flex align-items-center justify-content-between">
-                    <div className="text-left pl-2">
-                      <p>{name}</p>
-                      <p>Rent Per Hour {price} /-</p>
-                    </div>
-                    <div>
-                      <button className="btn1">
-                        <Link
-                          to={`/booking/${_id}`}
-                          style={{ textDecoration: "none" }}
-                        >
-                          Book Now
-                        </Link>
-                      </button>
+      {totalNearestVehicles.length > 0 && !loading && (
+        <div>
+          <h5 style={{ fontWeight: "bold", marginLeft: "10px" }}>
+            Vehicles Near You
+          </h5>
+          <Row justify="center" gutter={16}>
+            {totalNearestVehicles
+              .filter((o) => o.user !== user.otherInfo._id)
+              .map((car) => (
+                <Col key={car._id} lg={5} sm={24} xs={24}>
+                  <div className="car p-2 bs1">
+                    <img src={car.image} className="carimg" />
+                    <div className="car-content d-flex align-items-center justify-content-between">
+                      <div className="text-left pl-2">
+                        <p>{car.name}</p>
+                        <p>Rent Per Hour {car.price} /-</p>
+                      </div>
+                      <div>
+                        <button className="btn1">
+                          <Link
+                            to={`/booking/${car._id}`}
+                            style={{ textDecoration: "none" }}
+                          >
+                            Book Now
+                          </Link>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Col>
-            );
-          })}
-      </Row>
+                </Col>
+              ))}
+          </Row>
+        </div>
+      )}
     </>
   );
 };

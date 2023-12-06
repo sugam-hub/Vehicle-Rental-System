@@ -13,7 +13,7 @@ import AdminHeader from "../../components/AdminHeader/AdminHeader";
 
 const { RangePicker } = DatePicker;
 
-const AdminHome = () => {
+const Main = () => {
   const { cars } = useSelector((state) => state.vehiclesReducer);
   const { loading } = useSelector((state) => state.alertsReducer);
   const [totalCars, setTotalCars] = useState([]);
@@ -90,4 +90,4 @@ const AdminHome = () => {
   );
 };
 
-export default AdminHome;
+export default Main;

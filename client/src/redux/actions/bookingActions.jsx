@@ -9,7 +9,7 @@ export const bookCar = (reqObj) => async (dispatch) => {
     dispatch({ type: "LOADING", payload: false });
     message.success("Your car booked successfully");
     setTimeout(() => {
-      window.location.href("/userbookings");
+      window.location.href="/booking/userbookings";
     }, 500);
   } catch (err) {
     dispatch({ type: "LOADING", payload: false });

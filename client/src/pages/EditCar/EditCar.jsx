@@ -34,7 +34,7 @@ const EditCar = ({ match }) => {
       <DefaultLayout />
       {loading && <Spinner />}
 
-      <Row justify="center mt-4">
+      <Row justify="center" gutter={16} style={{marginTop:"7rem"}}>
         <Col lg={12} sm={24}>
           {totalCars.length > 0 && (
             <Form
