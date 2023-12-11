@@ -7,7 +7,12 @@ import Spinner from "../../components/Spinner/Spinner";
 import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import AdminHeader from "../../components/AdminHeader/AdminHeader";
 
+// import { Cloudinary } from "@cloudinary/base";
+// import { AdvancedImage } from "@cloudinary/react";
+
 const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
+const CLOUDINARY_UPLOAD_PRESET = "v35qow1m";
+const CLOUDINARY_CLOUD_NAME = "dryaouz83";
 
 const params = {
   q: "",
@@ -24,26 +29,47 @@ const AddCar = () => {
   const [searchText, setSearchText] = useState("");
   const [listPlace, setListPlace] = useState([]);
   const [selectPosition, setSelectPosition] = useState("");
+  const [image, setImage] = useState("");
 
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
   const userId = user.otherInfo._id;
   const isAdmin = user.otherInfo.isAdmin;
-  console.log(isAdmin)
 
   const lat = Number(selectPosition?.lat);
   const lon = Number(selectPosition?.lon);
-  console.log("lat:" + lat, "lon:" + lon);
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files && e.target.files[0];
-  //   if (file) {
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       image: file,
-  //     }));
-  //   }
-  // };
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+  
+    // Upload image to Cloudinary
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+  
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+  
+      if (!response.ok) {
+        // Handle Cloudinary upload error
+        console.error(`Cloudinary Upload Failed: ${response.statusText}`);
+        return;
+      }
+  
+      const data = await response.json();
+      console.log(data.secure_url)
+      setImage(data.secure_url);
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+    }
+  };
+  
   
 
   const onFinish = (values) => {
@@ -53,22 +79,19 @@ const AddCar = () => {
       coordinates: [lon, lat],
     };
     values.user = userId;
+    values.image = image; 
     dispatch(addCar(values));
-    console.log(values);
   };
 
   return (
     <>
-    {
-      isAdmin ? <AdminHeader /> :
-      <DefaultLayout />
-    }
+      {isAdmin ? <AdminHeader /> : <DefaultLayout />}
       {loading && <Spinner />}
 
-      <Row justify="center " style={{marginTop: "7rem"}}>
+      <Row justify="center " style={{ marginTop: "7rem" }}>
         <Col lg={12} sm={24}>
           <Form className="bs1 p-2" layout="vertical" onFinish={onFinish}>
-            <h3>Add New Car</h3>
+          <h3>Add New Car</h3>
             <hr />
             <Form.Item
               name="name"
@@ -77,12 +100,17 @@ const AddCar = () => {
             >
               <Input />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               name="image"
               label="Image URL"
-              rules={[{ required: true }]}
+              rules={[{ required: false }]}
             >
-              <Input />
+              {/* Input for the Cloudinary image URL */}
+              {/* <Input value={image} disabled />
+            </Form.Item>  */}
+            {/* Input for selecting an image file */}
+            <Form.Item name="image" label="Upload Image">
+              <Input type="file" onChange={handleImageChange} />
             </Form.Item>
             <Form.Item
               name="price"
@@ -187,7 +215,6 @@ const AddCar = () => {
               <button className="loginBtn">ADD CAR</button>
             </div>
           </Form>
-          <hr />
         </Col>
       </Row>
     </>

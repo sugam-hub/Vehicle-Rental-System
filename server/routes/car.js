@@ -12,22 +12,17 @@ const stripe = require("stripe")(
   "sk_test_51LeyE8HhWz2IA4nkl4hKopm3vuAdh1LCWweiZvrN2kFpkSeJr7HFCzEXnwkiwG0qZXICfGXApTbIkhuXP7gBtoju00w03Sgnsp"
 );
 const { v4: uuidv4 } = require("uuid");
+const cloudinary = require('cloudinary').v2;
 
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "./uploads/");
-//   },
-//   filename: function (req, file, cb) {
-//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-//     cb(null, file.fieldname + "-" + uniqueSuffix + ".jpg");
-//   },
-// });
-
-// const upload = multer({ storage: storage });
-
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
 //ADD NEW CAR
 router.post("/addcar", async (req, res) => {
+  try {
   const {
     user,
     name,
@@ -52,7 +47,6 @@ router.post("/addcar", async (req, res) => {
     address,
   });
 
-  try {
     const savedCar = await newCar.save();
     return res.status(200).json(savedCar);
   } catch (err) {
