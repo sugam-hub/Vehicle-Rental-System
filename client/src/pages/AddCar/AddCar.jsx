@@ -25,7 +25,7 @@ const AddCar = () => {
   const { loading } = useSelector((state) => state.alertsReducer);
 
   const [itemSelected, setItemSelected] = useState(false);
-  const [address, setAddress] = useState("asdasd");
+  const [address, setAddress] = useState("");
   const [searchText, setSearchText] = useState("");
   const [listPlace, setListPlace] = useState([]);
   const [selectPosition, setSelectPosition] = useState("");
@@ -109,7 +109,7 @@ const AddCar = () => {
               {/* <Input value={image} disabled />
             </Form.Item>  */}
             {/* Input for selecting an image file */}
-            <Form.Item name="image" label="Upload Image">
+            <Form.Item name="image" label="Upload Image" rules={[{ required: true }]}>
               <Input type="file" onChange={handleImageChange} />
             </Form.Item>
             <Form.Item
