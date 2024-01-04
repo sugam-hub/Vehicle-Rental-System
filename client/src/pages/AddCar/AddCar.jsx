@@ -91,12 +91,12 @@ const AddCar = () => {
       <Row justify="center " style={{ marginTop: "7rem" }}>
         <Col lg={12} sm={24}>
           <Form className="bs1 p-2" layout="vertical" onFinish={onFinish}>
-          <h3>Add New Car</h3>
+          <h3>Add New Vehicle</h3>
             <hr />
             <Form.Item
               name="name"
-              label="Car Name"
-              rules={[{ required: true }]}
+              label="Vehicle Name"
+              rules={[{ required: true, message: "Please enter the vehicle name" }]}
             >
               <Input />
             </Form.Item>
@@ -115,35 +115,42 @@ const AddCar = () => {
             <Form.Item
               name="price"
               label="Rent per hour"
-              rules={[{ required: true }]}
+              rules={[{ required: true },
+               
+              ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               name="capacity"
               label="Capacity"
-              rules={[{ required: true }]}
+              rules={[{ required: true },
+              ]}
+
             >
               <Input />
             </Form.Item>
             <Form.Item
               name="fuelType"
               label="Fuel Type"
-              rules={[{ required: true }]}
+              rules={[{ required: true },
+            ]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               name="phone"
               label="Phone Number"
-              rules={[{ required: true }]}
+              rules={[ { required: true,pattern: /^[0-9]+$/, message: 'Please enter the phone number' },
+              { len: 10, message: 'Phone number should be 10 digits long' },]}
             >
               <Input />
             </Form.Item>
             <Form.Item
               name="address"
               label="Address"
-              rules={[{ required: true }]}
+              rules={[{ required: true },
+              ]}
             >
               <Input
                 value={address}

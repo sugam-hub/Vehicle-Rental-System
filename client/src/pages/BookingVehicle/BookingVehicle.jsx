@@ -121,7 +121,8 @@ const BookingVehicle = ({ match }) => {
   }, [cars]);
 
   useEffect(() => {
-    setTotalAmount(totalHours * car.price + (driver && totalHours * 30));
+    setTotalAmount(totalHours * car.price + (driver &&  100));
+    // setTotalAmount()
   }, [driver, totalHours]);
 
   const selectTimeSlots = (values) => {
@@ -206,7 +207,7 @@ const BookingVehicle = ({ match }) => {
             }}
           >
             <RangePicker
-              style={{ width: "auto", alignItems: "right", marginLeft: "60px" }}
+              style={{ width: "auto", alignItems: "right", marginLeft: "60px", height: "40px" }}
               showTime={{ format: "HH:mm" }}
               format="MMM DD YYYY HH:mm"
               onChange={selectTimeSlots}
@@ -214,7 +215,8 @@ const BookingVehicle = ({ match }) => {
               disabledTime={disabledTime}
             />
             <button
-              className="bookBtn mt-2"
+              className="loginBtn mt-2"
+              style={{marginLeft: "60px", width: "740px"}}
               onClick={() => {
                 setShowModal(true);
               }}
@@ -230,7 +232,7 @@ const BookingVehicle = ({ match }) => {
                   <p>
                     Rent per hour = <b> {car.price}</b>
                   </p>
-                  <Checkbox
+                  {/* <Checkbox
                     onChange={(e) => {
                       if (e.target.checked) {
                         setDriver(true);
@@ -239,8 +241,8 @@ const BookingVehicle = ({ match }) => {
                       }
                     }}
                   >
-                    Driver Required
-                  </Checkbox>
+                    Delivery
+                  </Checkbox> */}
                   <h3>Total Amount = {totalAmount}</h3>
                 </div>
 
@@ -252,7 +254,7 @@ const BookingVehicle = ({ match }) => {
                   stripeKey="pk_test_51LeyE8HhWz2IA4nkPPcDp3w6IyY1dKZG4VYmJauWx5C66iPe30Zy1x5MZS7wsNUpyTuLrz0FQf6AM5k6wq87oWCE00L2NQAfRO"
                   onClick={bookNow}
                 >
-                  <button className="bookBtn">Book Now</button>
+                  <button className="loginBtn">Book Now</button>
                 </StripeCheckout>
               </>
             )}
@@ -269,7 +271,7 @@ const BookingVehicle = ({ match }) => {
           <div className="p-2">
             {car.bookedTimeSlots?.map((slot) => {
               return (
-                <button className="bookedTimeSlot mt-2">
+                <button className="loginBtn mt-2">
                   {slot.from} - {slot.to}
                 </button>
               );
@@ -277,7 +279,7 @@ const BookingVehicle = ({ match }) => {
 
             <div className="mt-4" style={{ alignItems: "end" }}>
               <button
-                className="closeBtn"
+                className="loginBtn"
                 onClick={() => {
                   setShowModal(false);
                 }}

@@ -11,8 +11,8 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { NotificationsNone } from "@mui/icons-material/";
 import { Link } from "react-router-dom";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 
 const AdminHeader = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -21,6 +21,7 @@ const AdminHeader = () => {
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -33,6 +34,17 @@ const AdminHeader = () => {
     setAnchorElUser(null);
   };
 
+  const menuItemStyle = {
+    fontSize: "1.5rem",
+  };
+
+  const notificationIconStyle = {
+    color: "white",
+    marginLeft: "16px",
+    marginTop: "6px",
+    fontSize: "50px",
+  };
+
   return (
     <AppBar position="sticky">
       <Container maxWidth="xl">
@@ -43,7 +55,8 @@ const AdminHeader = () => {
             component="a"
             href="/"
             sx={{
-              mr: 2,
+              mr: 50,
+              fontSize: "30px",
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
@@ -84,7 +97,7 @@ const AdminHeader = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              <MenuItem onClick={handleCloseNavMenu}>
+              <MenuItem onClick={handleCloseNavMenu} sx={menuItemStyle}>
                 <Typography textAlign="center">
                   <Link
                     style={{ textDecoration: "none", color: "white" }}
@@ -95,7 +108,7 @@ const AdminHeader = () => {
                 </Typography>
               </MenuItem>
 
-              <MenuItem>
+              <MenuItem sx={menuItemStyle}>
                 <Typography
                   textAlign="center"
                   onClick={() => {
@@ -110,27 +123,45 @@ const AdminHeader = () => {
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Button
-              onClick={() => {
-                window.location.href = "/";
+              component={Link}
+              to="/"
+              sx={{
+                my: 2,
+                fontSize: "20px",
+                color: "white",
+                display: "block",
+                "&:hover": {
+                  backgroundColor: "#2196F3",
+                },
               }}
-              sx={{ my: 2, color: "white", display: "block" }}
             >
               Home
             </Button>
             <Button
-              onClick={() => {
-                window.location.href = "/users";
+              component={Link}
+              to="/users"
+              sx={{
+                my: 2,
+                fontSize: "20px",
+                color: "white",
+                display: "block",
+                "&:hover": {
+                  backgroundColor: "#2196F3", 
+                },
               }}
-              sx={{ my: 2, color: "white", display: "block" }}
             >
               Users
             </Button>
           </Box>
 
+          <Link to="/notification" style={{ textDecoration: "none" }}>
+            <NotificationsNoneIcon style={notificationIconStyle} />
+          </Link>
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" />
+                <Avatar alt="Admin" style={{width: "50px", height: "50px"}}/>
               </IconButton>
             </Tooltip>
             <Menu
@@ -177,4 +208,5 @@ const AdminHeader = () => {
     </AppBar>
   );
 };
+
 export default AdminHeader;

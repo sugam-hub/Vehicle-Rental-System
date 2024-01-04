@@ -38,22 +38,22 @@ const UserBookings = () => {
                   <Row gutter={16} className="bs1 mt-3 text-left">
                     <Col lg={6} sm={24}>
                       <p>
-                        <b>{booking.car.name}</b>
+                        <b>{booking.car?.name}</b>
                       </p>
                       <p>
-                        Total hours: <b>{booking.totalHours}</b>
+                        Total hours: <b>{booking?.totalHours}</b>
                       </p>
                       <p>
-                        Rent per hour: <b>{booking.car.price}</b>
+                        Rent per hour: <b>{booking.car?.price}</b>
                       </p>
                       <p>
                         Total amount: <b>{booking.totalAmount}</b>
                       </p>
                       <p>
-                        Location: <b>{booking.car.address}</b>
+                        Location: <b>{booking.car?.address}</b>
                       </p>
                       <p>
-                        Phone number: <b>{booking.car.phone}</b>
+                        Phone number: <b>{booking.car?.phone}</b>
                       </p>
                     </Col>
                     <Col lg={12} sm={24}>
@@ -61,23 +61,23 @@ const UserBookings = () => {
                         {/* TransactionId: <b>{booking.transactionId}</b> */}
                       </p>
                       <p>
-                        From: <b>{booking.bookedTimeSlots.from}</b>
+                        From: <b>{booking.bookedTimeSlots?.from}</b>
                       </p>
                       <p>
-                        To: <b>{booking.bookedTimeSlots.to}</b>
+                        To: <b>{booking.bookedTimeSlots?.to}</b>
                       </p>
                       <p>
                         Date of booking:{" "}
-                        <b>{moment(booking.createdAt).format("MMM DD yyyy")}</b>
+                        <b>{moment(booking?.createdAt).format("MMM DD yyyy")}</b>
                       </p>
                       <p>
-                        Transaction Id: <b>{booking.transactionId}</b>
+                        Transaction Id: <b>{booking?.transactionId}</b>
                       </p>
                       <Popconfirm
                         title="Delete the task"
                         description="Are you sure to delete this booking?"
                         onConfirm={() => {
-                          dispatch(deleteBooking({ bookingid: booking._id }));
+                          dispatch(deleteBooking({ bookingid: booking?._id }));
                         }}
                         okText="Yes"
                         cancelText="No"
@@ -87,7 +87,7 @@ const UserBookings = () => {
                     </Col>
                     <Col lg={6} sm={24} className="text-right">
                       <img
-                        src={booking.car.image}
+                        src={booking.car?.image}
                         height="140"
                         className="p-2"
                       />

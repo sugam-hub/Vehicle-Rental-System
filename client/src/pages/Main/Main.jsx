@@ -34,9 +34,9 @@ const Main = () => {
       <AdminHeader />
       <Row justify="center" gutter="16" className="mt-2">
         <Col lg={20} sm={24}>
-          <button className="loginBtn">
+          <button className="loginBtn" style={{marginTop: "20px"}}>
             <a href="/addcar" style={{ textDecoration: "none" }}>
-              ADD CAR
+              ADD VEHICLE
             </a>
           </button>
         </Col>
@@ -53,7 +53,7 @@ const Main = () => {
 
                 <div className="car-content d-flex align-items-center justify-content-between">
                   <div className="text-left pl-2">
-                    <p>{name}</p>
+                    <p style={{fontSize: "18px"}}>{name}</p>
                     <p>Rent Per Hour {price} /-</p>
                   </div>
                   <div className="mr-4">

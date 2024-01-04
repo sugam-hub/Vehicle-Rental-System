@@ -15,6 +15,10 @@ body{
     /* overflow: hidden; */
 }
 
+.eye .anticon svg {
+    color:#fff !important
+}
+
 /*bs = box shadow */
 .bs1{
     box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
@@ -47,7 +51,7 @@ h1{
     border: 1px solid orangered !important;
     margin-right: 10px;
     border-radius: 5px;
-    padding: 2px !important;
+    padding: 5px !important;
     cursor: pointer;
     outline: none !important;
     text-decoration: none !important;
@@ -60,7 +64,7 @@ h1{
     border: 1px solid orangered !important;
     margin-left: 60px;
     border-radius: 5px;
-    padding: 2px !important;
+    padding: 5px !important;
     cursor: pointer;
     outline: none !important;
     text-decoration: none !important;
@@ -101,18 +105,20 @@ h1{
     border: none !important;
 }
 .loginBtn{
+    font-size: 14px;
     box-shadow: none !important;
-    background-color: white !important;
-    color: orangered !important;
-    border: 1px solid orangered !important;
+    background-color: rgb(238, 240, 241) !important;
+    color: black !important;
+    /* border: 1px solid orangered !important; */
     margin-right: 10px;
     border-radius: 5px;
-    padding: 2px 10px !important;
+    padding: 5px 20px !important;
     cursor: pointer;
     outline: none !important;
 }
 .loginBtn:focus{
     border: none !important;
+    
 }
 
 button{
@@ -176,6 +182,8 @@ button{
     min-height: 100vh;
 }
 
+
+
 .login label, .login h1{
     color: white !important;
     opacity: 0.6;
@@ -226,4 +234,22 @@ svg{
 .map-container{
     width: 100%;
     height: 100vh;
+}
+
+.ant-popover-content {
+    width: 300px;
+    height: 80px;
+}
+
+.ant-popover-inner {
+    padding: 50px;
+}
+
+.ant-popover-inner-content {
+    padding: 50px;
+}
+
+.ant-popconfirm-buttons .ant-btn {
+    padding: 0px;
+    height: 40px;
 }

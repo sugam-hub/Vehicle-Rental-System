@@ -8,8 +8,7 @@ import {
 import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
 import { Col, Row } from "antd";
 import moment from "moment";
-import Spinner from "../../components/Spinner/Spinner";
-import DefaultLayout1 from "../../components/DefaultLayout/DefaultLayout";
+import AdminHeader from "../../components/AdminHeader/AdminHeader";
 
 const Notification = () => {
   const dispatch = useDispatch();
@@ -17,6 +16,7 @@ const Notification = () => {
   const { loading } = useSelector((state) => state.alertsReducer);
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user.otherInfo._id;
+  const admin = user.otherInfo.isAdmin;
   const [status, setStatus] = useState(false);
   const [car, setCar] = useState();
   const [carId, setCarId] = useState();
@@ -36,6 +36,7 @@ const Notification = () => {
       console.log(err);
     }
   }, [bookings]);
+  console.log(bookings)
 
   const handleAcceptStatus = (e) => {
     setStatus(true);
@@ -58,18 +59,26 @@ const Notification = () => {
     dispatch(carStatusRejected(reqObj));
   };
 
+  let marginTopValue = "6rem"
+
+  if(admin) {
+    marginTopValue = "1rem"
+  }
+
   return (
     <>
       <div>
+        {admin ? <AdminHeader /> :
         <DefaultLayout />
+      }
         {/* {loading && <Spinner />} */}
-        <h3 className="text-center" style={{marginTop: "6rem"}}>Notifications</h3>
+        <h3 className="text-center" style={{marginTop: marginTopValue}}>Notifications</h3>
 
         {user ? (
           <Row justify="center" gutter={16} >
             <Col lg={20} sm={24}>
               {bookings
-                .filter((o) => o.car.user == userId)
+                .filter((o) => o.car?.user == userId)
                 .map((booking) => {
                   return (
                     <Row gutter={16} className="bs1 mt-3 text-left">
@@ -86,6 +95,7 @@ const Notification = () => {
                         <p>
                           Total amount: <b>{booking.totalAmount}</b>
                         </p>
+                       
                       </Col>
                       <Col lg={6} sm={24}>
                         <p>

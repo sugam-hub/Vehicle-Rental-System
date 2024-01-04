@@ -22,7 +22,7 @@ export const addCar = (reqObj) => async (dispatch) => {
     await axios.post("http://localhost:5000/api/auth/addcar", reqObj);
     message.success("New car added successfully...");
     setTimeout(() => {
-      window.location.href = "/addcar";
+      window.location.href = "/admin";
     }, 500);
     dispatch({ type: "LOADING", payload: false });
   } catch (err) {

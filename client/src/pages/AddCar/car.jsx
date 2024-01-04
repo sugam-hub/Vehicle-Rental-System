@@ -163,7 +163,7 @@ const AddCar = () => {
                         console.log("HERE", item);
                         console.log("HERE", item.display_name);
                         setSelectPosition(item);
-                        setAddress(item.display_name) && console.log(address);
+                        setAddress(item.display_name);
                         setItemSelected(true);
                         setListPlace([]);
                       }}
@@ -184,7 +184,7 @@ const AddCar = () => {
             </List>
 
             <div>
-              <button className="loginBtn">ADD CAR</button>
+              <button className="loginBtn">ADD VEHICLE</button>
             </div>
           </Form>
           <hr />

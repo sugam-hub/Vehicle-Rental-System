@@ -38,7 +38,7 @@ const AdminHome = () => {
           
           <button className="loginBtn">
             <a href="/addcar" style={{ textDecoration: "none" }}>
-              ADD CAR
+              ADD VEHICLE
             </a>
           </button>
         </Col>
@@ -57,7 +57,7 @@ const AdminHome = () => {
 
                     <div className="car-content d-flex align-items-center justify-content-between">
                       <div className="text-left pl-2">
-                        <p>{name}</p>
+                        <p style={{fontSize: "18px"}}>{name}</p>
                         <p>Rent Per Hour {price} /-</p>
                       </div>
                       <div className="mr-4">
@@ -78,6 +78,7 @@ const AdminHome = () => {
                           }}
                           okText="Yes"
                           cancelText="No"
+                          style="custom-popconfirm"
                         >
                           <DeleteOutlined
                             style={{ color: "red", cursor: "pointer" }}

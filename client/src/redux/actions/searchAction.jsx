@@ -1,5 +1,3 @@
-// searchActions.js
-
 import axios from "axios";
 
 export const getAllSearch = (searchQuery) => async (dispatch) => {

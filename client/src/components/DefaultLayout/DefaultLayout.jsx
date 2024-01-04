@@ -15,16 +15,18 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { Link } from "react-router-dom";
 
 const primaryColor = "#2196F3";
-const secondaryColor = "#FF4081";
+const secondaryColor = "#0777d3";
 const textColor = "#FFFFFF";
 
 const titleStyle = {
+  marginLeft: 0,
   flexGrow: 1,
   fontFamily: "Roboto, sans-serif",
   fontWeight: 700,
   letterSpacing: ".3rem",
   color: textColor,
   textDecoration: "none",
+  // fontSize: "2rem"
 };
 
 const buttonStyle = {
@@ -33,13 +35,12 @@ const buttonStyle = {
   color: textColor,
   display: "block",
   marginY: 2,
-  marginRight: "10px", // Add space between menu items
+  marginRight: "10px"
 };
 
 const toolbarStyle = {
   padding: "0 16px",
   display: "flex",
-  justifyContent: "space-between",
   alignItems: "center",
 };
 
@@ -67,6 +68,22 @@ const DefaultLayout = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const menuItemStyle = {
+    fontSize: "1.2rem", 
+  };
+
+  const notificationIconStyle = {
+    color: "white",
+    marginLeft: "16px",
+    marginTop: "6px",
+    fontSize: "50px"
+  };
+  
+  const avatarIconStyle = {
+    width: "50px", 
+    height: "50px",
   };
 
   return (
@@ -106,7 +123,7 @@ const DefaultLayout = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              <MenuItem onClick={handleCloseNavMenu}>
+              <MenuItem onClick={handleCloseNavMenu} sx={menuItemStyle}>
                 <Typography textAlign="center">
                   <Link
                     style={{ textDecoration: "none", color: textColor }}
@@ -117,7 +134,7 @@ const DefaultLayout = () => {
                 </Typography>
               </MenuItem>
 
-              <MenuItem>
+              <MenuItem sx={menuItemStyle}>
                 <Typography
                   textAlign="center"
                   onClick={() => {
@@ -135,7 +152,7 @@ const DefaultLayout = () => {
               onClick={() => {
                 window.location.href = "/";
               }}
-              sx={{ ...buttonStyle, ...buttonHoverStyle }}
+              sx={{ ...buttonStyle, ...buttonHoverStyle, ...menuItemStyle}}
             >
               Home
             </Button>
@@ -143,7 +160,7 @@ const DefaultLayout = () => {
               onClick={() => {
                 window.location.href = "/booking/userbookings";
               }}
-              sx={{ ...buttonStyle, ...buttonHoverStyle }}
+              sx={{ ...buttonStyle, ...buttonHoverStyle, ...menuItemStyle }}
             >
               Bookings
             </Button>
@@ -151,26 +168,22 @@ const DefaultLayout = () => {
               onClick={() => {
                 window.location.href = "/admin";
               }}
-              sx={{ ...buttonStyle, ...buttonHoverStyle }}
+              sx={{ ...buttonStyle, ...buttonHoverStyle, ...menuItemStyle }}
             >
-              Add Car
+              Add Vehicle
             </Button>
           </Box>
 
           <Link to="/notification" style={{ textDecoration: "none" }}>
             <NotificationsNoneIcon
-              style={{
-                color: "orangered",
-                marginLeft: "16px",
-                marginTop: "6px",
-              }}
+              style={notificationIconStyle}
             />
           </Link>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" />
+                <Avatar alt="Remy Sharp" sx={avatarIconStyle} />
               </IconButton>
             </Tooltip>
             <Menu

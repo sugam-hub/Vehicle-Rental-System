@@ -29,7 +29,6 @@ const App = () => {
 
   const isAdmin = user && user.otherInfo.isAdmin;
 
-  console.log(isAdmin);
   return (
     <>
       {isAdmin ? (
@@ -41,6 +40,14 @@ const App = () => {
             <Route path="/register" exact element={<Register />} />
             <Route path="/adminprofile" element={<AdminProfile />} />
             <Route path="/addcar" element={<AddCar />} />
+            <Route path="/editcar/:carid" element={<EditCar />} />
+            <Route path="/notification" element={<Notification />} />
+            <Route path="/forgot-password" exact element={<ForgotPassword />} />
+            <Route
+              path="/reset-password/:id/"
+              exact
+              element={<ResetPassword />}
+            />
           </Routes>
         </Router>
       ) : (

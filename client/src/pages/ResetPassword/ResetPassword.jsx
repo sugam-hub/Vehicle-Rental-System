@@ -41,7 +41,7 @@ const ResetPassword = () => {
               label="New Password"
               rules={[{ required: true }]}
             >
-              <Input />
+               <Input.Password size="large" style={{backgroundColor:"#292929" ,border:0,fontSize:"18px"}} className="eye" />
             </Form.Item>
 
             <button className="loginBtn" onClick={handleSubmit}>

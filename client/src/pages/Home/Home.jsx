@@ -25,7 +25,7 @@ const Home = () => {
   const longitude = user.otherInfo.lon;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8; // Number of items to show per page
+  const itemsPerPage = 8; 
 
   const indexOfLastCar = currentPage * itemsPerPage;
   const indexOfFirstCar = indexOfLastCar - itemsPerPage;
@@ -72,7 +72,6 @@ const Home = () => {
             moment(booking.from).isBetween(selectedFrom, selectedTo) ||
             moment(booking.to).isBetween(selectedFrom, selectedTo)
           ) {
-            // Do nothing if there's a booking conflict
           } else {
             temp.push(car);
           }
@@ -82,7 +81,6 @@ const Home = () => {
     setTotalCars(temp);
   };
 
-  // Handle search button click
   const handleSearchButtonClick = () => {
     const filtered = totalCars.filter((car) =>
       car.name.toLowerCase().includes(searchInput.toLowerCase()) &&
@@ -99,15 +97,25 @@ const Home = () => {
     setSearchClicked(false); 
   };
 
+  const datePickerStyle = {
+    width: "800px",
+  };
+
+  const searchInputStyle = {
+    width: "800px",
+  };
+
   return (
     <>
       <DefaultLayout />
       <Row style={{ marginTop: "7rem" }} justify="center">
-        <Col lg={20} sm={24} className="d-flex justify-content-left">
+        <Col lg={20} sm={24} className="d-flex justify-content-left" style={{marginBottom: "40px"}} >
           <RangePicker
             showTime={{ format: "HH:mm" }}
             format="MMM DD YYYY HH:mm"
             onChange={setFilter}
+            size="large"
+            style={datePickerStyle} 
           />
           <Col lg={8} sm={24} className="d-flex" style={{ marginLeft: "600px" }}>
             <Search
@@ -117,9 +125,10 @@ const Home = () => {
               size="large"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              onClick={() => setSearchClicked(false)} // Reset the flag when the input field is clicked
+              onClick={() => setSearchClicked(false)} 
               onSearch={handleSearchButtonClick}
-              onClear={handleSearchClear} // Handle clear event
+              onClear={handleSearchClear}
+              style={searchInputStyle}
             />
           </Col>
         </Col>
@@ -145,11 +154,11 @@ const Home = () => {
                         <img src={car.image} className="carimg" />
                         <div className="car-content d-flex align-items-center justify-content-between">
                           <div className="text-left pl-2">
-                            <p>{car.name}</p>
+                            <p style={{fontSize: "18px"}}>{car.name}</p>
                             <p>Rent Per Hour {car.price} /-</p>
                           </div>
                           <div>
-                            <button className="btn1">
+                            <button className="loginBtn">
                               <Link
                                 to={`/booking/${car._id}`}
                                 style={{ textDecoration: "none" }}
@@ -176,11 +185,11 @@ const Home = () => {
                       <img src={car.image} className="carimg" />
                       <div className="car-content d-flex align-items-center justify-content-between">
                         <div className="text-left pl-2">
-                          <p>{car.name}</p>
+                          <p style={{fontSize: "18px"}}>{car.name}</p>
                           <p>Rent Per Hour {car.price} /-</p>
                         </div>
                         <div>
-                          <button className="btn1">
+                          <button className="loginBtn">
                             <Link
                               to={`/booking/${car._id}`}
                               style={{ textDecoration: "none" }}
@@ -201,13 +210,13 @@ const Home = () => {
         total={searchClicked ? filteredCars.length : totalCars.length}
         pageSize={itemsPerPage}
         onChange={handlePageChange}
-        style={{ marginTop: "20px", textAlign: "center" }}
+        style={{ marginTop: "40px", textAlign: "center" }}
       />
 
       {loading && <Spinner />}
       {totalNearestVehicles.length > 0 && !loading && (
         <div>
-          <h5 style={{ fontWeight: "bold", marginLeft: "10px" }}>
+          <h5 style={{ fontWeight: "bold", marginLeft: "880px", marginTop: "60px", marginBottom: "20px"}}>
             Vehicles Near You
           </h5>
           <Row justify="center" gutter={16}>
@@ -218,12 +227,12 @@ const Home = () => {
                   <div className="car p-2 bs1">
                     <img src={car.image} className="carimg" />
                     <div className="car-content d-flex align-items-center justify-content-between">
-                      <div className="text-left pl-2">
-                        <p>{car.name}</p>
+                      <div className="text-left pl-2" >
+                        <p style={{fontSize: "18px"}}>{car.name}</p>
                         <p>Rent Per Hour {car.price} /-</p>
                       </div>
                       <div>
-                        <button className="btn1">
+                        <button className="loginBtn">
                           <Link
                             to={`/booking/${car._id}`}
                             style={{ textDecoration: "none" }}

@@ -276,7 +276,7 @@ router.post("/nearestvehicles", async (req, res) => {
     const latitude = parseFloat(req.body.latitude) || 27.7172;
     const longitude = parseFloat(req.body.longitude) || 85.324;
     const maxDistance = 1000 * 1609; // 1000 miles in meters
-    const k = 3; // Number of nearest vehicles to find
+    const k = 100; // Number of nearest vehicles to find
 
     // Find all cars from the database
     const allCars = await Car.find({});

@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { editCar, getAllCars } from "../../redux/actions/carsAction";
 import Spinner from "../../components/Spinner/Spinner";
+import AdminHeader from "../../components/AdminHeader/AdminHeader";
+
+const CLOUDINARY_UPLOAD_PRESET = "v35qow1m";
+const CLOUDINARY_CLOUD_NAME = "dryaouz83";
 
 const EditCar = ({ match }) => {
   const dispatch = useDispatch();
@@ -13,6 +17,11 @@ const EditCar = ({ match }) => {
   const { loading } = useSelector((state) => state.alertsReducer);
   const [car, setCar] = useState();
   const [totalCars, setTotalCars] = useState([]);
+
+  const user = JSON.parse(localStorage.getItem("user"));
+console.log(user)
+const admin = user.otherInfo.isAdmin;
+console.log(admin)
 
   useEffect(() => {
     if (cars.length == 0) {
@@ -29,9 +38,44 @@ const EditCar = ({ match }) => {
     console.log(values);
   };
 
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+  
+    // Upload image to Cloudinary
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+  
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+  
+      if (!response.ok) {
+        // Handle Cloudinary upload error
+        console.error(`Cloudinary Upload Failed: ${response.statusText}`);
+        return;
+      }
+  
+      const data = await response.json();
+      console.log(data.secure_url)
+      setImage(data.secure_url);
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+    }
+  };
+
   return (
     <>
+
+      {admin ? <AdminHeader/> :
       <DefaultLayout />
+    }  
       {loading && <Spinner />}
 
       <Row justify="center" gutter={16} style={{marginTop:"7rem"}}>
@@ -57,7 +101,8 @@ const EditCar = ({ match }) => {
                 label="Image URL"
                 rules={[{ required: true }]}
               >
-                <Input />
+                 <Input onChange={handleImageChange} disabled
+                 />
               </Form.Item>
               <Form.Item
                 name="price"

@@ -54,14 +54,14 @@ const Register = () => {
   return (
     <div className="login">
       <Row gutter={16} className="d-flex align-items-center">
-        <Col lg={16} style={{ position: "relative" }}>
+        <Col lg={12} style={{ position: "relative" }}>
           <img
             src="https://images.unsplash.com/photo-1485291571150-772bcfc10da5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8YmxhY2slMjBjYXJ8ZW58MHx8MHx8&w=1000&q=80"
             alt=""
           />
           <h1 className="login-logo">Rent A Vehicle</h1>
         </Col>
-        <Col lg={8} className="text-left p-5">
+        <Col lg={12} className="text-left" style={{paddingRight:"7rem"}}>
           <Form
             layout="vertical"
             className="login-form p-5"
@@ -71,30 +71,32 @@ const Register = () => {
             <hr />
             <Form.Item
               name="username"
-              label="Username"
+              label={<p style={{ fontSize: "20px" ,color:"#fff"}}>Username</p>}
               rules={[{ required: true }]}
             >
-              <Input />
+             <Input size="large" style={{fontSize:"18px"}}/>
             </Form.Item>
-            <Form.Item name="email" label="Email" rules={[{ required: true }]}>
-              <Input />
+              
+            <Form.Item name="email"  rules={[{ required: true }]} label={<p style={{ fontSize: "20px" ,color:"#fff"}}>Email</p>}>
+            <Input size="large" style={{fontSize:"18px"}}/>
             </Form.Item>
             <Form.Item
               name="phone"
-              label="Phone number"
+           
+              label={<p style={{ fontSize: "20px" ,color:"#fff"}}>Phone number</p>}
               rules={[{ required: true }]}
             >
-              <Input />
+             <Input size="large" style={{fontSize:"18px"}}/>
             </Form.Item>
             <div style={{display: "flex", alignItems: "center"}}>
               <p style={{color: "#ff4d4f", marginLeft: '-5px', marginRight: '3px'}}>*</p>
-              <label style={{marginLeft: "-3px"}}>Address</label>
+              <label style={{marginLeft: "-3px",fontSize: "20px" ,color:"#fff"}}>Address</label>
             </div>
             
             <div style={{display: "flex", height: "30px", alignItems: "center", justifyContent: "center", marginTop: "10px"}}>
             <input
               value={searchText}
-              style={{width: "95%", height: "32px", padding: "4px 11px", borderRadius: "7px", marginLeft: ""}}
+              style={{width: "95%", height: "40px", padding: "4px 11px", borderRadius: "7px",fontSize:"18px", marginLeft: ""}}
               onChange={(event) => {
                 setSearchText(event.target.value);
               }}
@@ -102,7 +104,7 @@ const Register = () => {
 
             <p
               // className="loginBtn"
-              style={{border: '1px solid orangered', width: "60px",height: "30px", padding: "5px", color: "orangered", borderRadius: "5px", backgroundColor: "white", cursor: "pointer"}}
+              style={{ width: "60px",height: "32px", padding: "5px", color: "black", borderRadius: "5px", backgroundColor: "#eff6fd", cursor: "pointer"}}
               onClick={(e) => {
                 e.preventDefault();
                 const params = {
@@ -142,7 +144,7 @@ const Register = () => {
                           style={{ width: "38px", height: "38px" }}
                         />
                       </ListItemIcon>
-                      <ListItemText primary={item?.display_name} />
+                      <ListItemText primary={item?.display_name} style={{color:"#fff",marginBottom:"0px"}} />
                     </ListItem>
                     <Divider />
                   </div>
@@ -153,28 +155,32 @@ const Register = () => {
            
             <Form.Item
               name="password"
-              label="Password"
+              label={<p style={{ fontSize: "20px" ,color:"#fff"}}>Password</p>}
               rules={[{ required: true }]}
             >
-              <div style={{display: "flex", height: "30px", alignItems: "center", justifyContent: "center"}}>
+              <Input.Password size="large" style={{backgroundColor:"#292929" ,border:0,fontSize:"18px"}} className="eye" />
+
+              {/* <div style={{display: "flex", height: "30px", alignItems: "center", justifyContent: "center"}}>
               <Input type={showPassword ? "text" : "password"} />
               <p style={{border: '1px solid orangered', width: "50px",height: "30px", padding: "5px", color: "orangered", borderRadius: "5px", backgroundColor: "white", cursor: "pointer"}} onClick={handlePassword}>{showPassword ? "Hide" : "Show"}</p>
-              </div>
+              </div> */}
             </Form.Item>
             <Form.Item
               name="confirmPassword"
-              label="Confirm Password"
+              label={<p style={{ fontSize: "20px" ,color:"#fff"}}>Confirm Password</p>}
               rules={[{ required: true }]}
             >
-              <div style={{display: "flex", height: "30px", alignItems: "center", justifyContent: "center"}}>
+              <Input.Password size="large" style={{backgroundColor:"#292929" ,border:0,fontSize:"18px"}} className="eye" />
+
+              {/* <div style={{display: "flex", height: "30px", alignItems: "center", justifyContent: "center"}}>
               <Input type={showConfirmPassword ? "text" : "password"} />
               <p style={{border: '1px solid orangered', width: "50px",height: "30px", padding: "5px", color: "orangered", borderRadius: "5px", backgroundColor: "white", cursor: "pointer"}} onClick={handleConfirmPassword}>{showConfirmPassword ? "Hide" : "Show"}</p>
-              </div>
+              </div> */}
             </Form.Item>
 
-            <button className="loginBtn">Register</button>
+            <button className="loginBtn" style={{width:"41.5vw",fontSize:"20px"}}>Register</button>
             <br />
-            <Link style={{ textDecoration: "none" }} to="/login">
+            <Link style={{ textDecoration: "none", fontSize: "20px", marginTop: "5px"}} to="/login">
               Click here to login
             </Link>
           </Form>
